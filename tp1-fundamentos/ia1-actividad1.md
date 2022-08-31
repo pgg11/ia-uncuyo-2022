@@ -1,4 +1,4 @@
-## Trabajo Práctico 1: Fundamentos
+## Actividad N°1
 
 #### Analizar y responder las siguientes preguntas
 

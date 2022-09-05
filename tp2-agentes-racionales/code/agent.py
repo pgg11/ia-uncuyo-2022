@@ -1,4 +1,3 @@
-from abc import abstractmethod
 from environment import Environment as env
 from random import randint
 
@@ -37,7 +36,6 @@ class Agent:
     def perspective(self,env):
         pass
     
-    @abstractmethod
     def think(self):
         pass
 
@@ -45,8 +43,7 @@ class Agent:
 class SimpleReflectiveAgent(Agent):
 
     def __init__(self,env,remaining_actions):
-        self.env = env
-        self.remaining_actions = remaining_actions
+        super().__init__(env, remaining_actions)
     
     def think(self):
         if self.env.is_dirty():

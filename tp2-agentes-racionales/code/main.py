@@ -103,7 +103,7 @@ insertRow = ['agent','environment','dirt_rate','avg_performance','iter_1','iter_
 sheet.append_row(insertRow)
 
 for result in results:
-    insertRow1 = ['simple_reflective',result['size'],result['dirt_rate'],result['simple_agent_avg']]+result['simple_agent_performances'] #Preparando lista a insertar
-    insertRow2 = ['random',result['size'],result['dirt_rate'],result['random_agent_avg']]+result['random_agent_performances'] #Preparando lista a insertar
+    insertRow1 = ['simple_reflective',str(result['size'])+'x'+str(result['size']),result['dirt_rate'],result['simple_agent_avg']]+result['simple_agent_performances'] #Preparando lista a insertar
+    insertRow2 = ['random',str(result['size'])+'x'+str(result['size']),result['dirt_rate'],result['random_agent_avg']]+result['random_agent_performances'] #Preparando lista a insertar
     sheet.append_row(insertRow1)
     sheet.append_row(insertRow2)

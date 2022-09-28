@@ -1,14 +1,13 @@
 from environment import Environment as env
 from random import randint
 
+from ObjectiveAgent import ObjectiveAgent
 
-class BFSAgent:
+
+class UCSAgent(ObjectiveAgent):
 
     def __init__(self,env):
-        self.env = env
-        self.graph = {}
-        self.frontier = []
-        self.explored = []
+        super().__init__(env)
 
     
     def explore(self,posX,posY):
@@ -21,68 +20,75 @@ class BFSAgent:
        
 
         if self.env.accept_action('up',posX,posY):
-            self.frontier.insert(0,(posY-1,posX))
+            
             if not (posY-1,posX) in self.explored:
                 self.graph[(posY,posX)].insert(0,(posY-1,posX))
+            if not (posY-1,posX) in self.frontier:
+                cost = self.calc_cost((posY-1,posX))
+                self.frontier.insert(0,[posY-1,posX,cost])
 
         if self.env.accept_action('right',posX,posY):
-            self.frontier.insert(0,(posY,posX+1))
+            
             if not (posY,posX+1) in self.explored:
                 self.graph[(posY,posX)].insert(0,(posY,posX+1))
+            if not (posY,posX+1) in self.frontier:
+                cost = self.calc_cost((posY,posX+1))
+                self.frontier.insert(0,[posY,posX+1,cost])
 
         if self.env.accept_action('down',posX,posY):
-            self.frontier.insert(0,(posY+1,posX))
+            
             if not (posY+1,posX) in self.explored:
                 self.graph[(posY,posX)].insert(0,(posY+1,posX))
+            if not (posY+1,posX) in self.frontier:
+                cost = self.calc_cost((posY+1,posX))
+                self.frontier.insert(0,[posY+1,posX,cost])
 
         if self.env.accept_action('left',posX,posY):
-            self.frontier.insert(0,(posY,posX-1))
             if not (posY,posX-1) in self.explored:
                 self.graph[(posY,posX)].insert(0,(posY,posX-1))
+            if not (posY,posX-1) in self.frontier:
+                cost = self.calc_cost((posY,posX-1))
+                self.frontier.insert(0,[posY,posX-1,cost])
 
-        
-    
-    def get_path(self,graph,start,goal):
-        result = []
-        node = goal
-        while node != start:
-            for key in graph:
-                if node in graph[key]:
-                    result.insert(0,node)
-                    node = key
-                    break
-        result.insert(0,start)
-        return result
+    def calc_cost(self,node):
+        start = (self.env.posY,self.env.posX)
+        return (len(self.get_path(self.graph,start,node))-1)
+
+    def sort_frontier(self):
+        self.frontier.sort(key=lambda x:x[1], reverse=True)
+            
 
     def think(self):
         start = (self.env.posY,self.env.posX)
         goal = (self.env.objectivePosY,self.env.objectivePosX)
         self.explore(self.env.posX,self.env.posY)
         while len(self.frontier)>0:
-            y,x = self.frontier.pop()
+            self.sort_frontier()
+            y,x,cost = self.frontier.pop()
             if not (y,x) in self.frontier or not (y,x) in self.explored:
-                self.explore(x,y)
                 if x==self.env.objectivePosX and y==self.env.objectivePosY:
                     return self.get_path(self.graph,start,goal)
+                self.explore(x,y)     
+                
         if len(self.frontier) == 0:
-                return False
+                return []
 
 
 
-initPosX= randint(0,9)
-initPosY= randint(0,9)
-objectivePosX= randint(0,9)
-objectivePosY= randint(0,9)
+
+'''initPosX= randint(0,99)
+initPosY= randint(0,99)
+objectivePosX= randint(0,99)
+objectivePosY= randint(0,99)
 obstacles_rate = 0.08
-e = env(10,initPosX,initPosY,objectivePosX,objectivePosY,obstacles_rate)
+e = env(100,initPosX,initPosY,objectivePosX,objectivePosY,obstacles_rate)
 e.generate_obstacles()
 e.print_environment()
-a = BFSAgent(e)
+a = UCSAgent(e)
 print('inicio')
 print((a.env.posY,a.env.posX))
 print('objetivo')
 print((objectivePosY,objectivePosX))
 res = a.think()
 
-
-print(res)
+print(res)'''

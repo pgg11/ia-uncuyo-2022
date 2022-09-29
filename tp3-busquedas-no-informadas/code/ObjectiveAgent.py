@@ -24,5 +24,4 @@ class ObjectiveAgent:
                     result.insert(0,node)
                     node = key
                     break
-        result.insert(0,start)
         return result

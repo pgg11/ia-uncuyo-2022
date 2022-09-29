@@ -50,23 +50,3 @@ class BFSAgent(ObjectiveAgent):
                     return self.get_path(self.graph,start,goal)
         if len(self.frontier) == 0:
                 return []
-
-
-
-'''initPosX= randint(0,99)
-initPosY= randint(0,99)
-objectivePosX= randint(0,99)
-objectivePosY= randint(0,99)
-obstacles_rate = 0.08
-e = env(100,initPosX,initPosY,objectivePosX,objectivePosY,obstacles_rate)
-e.generate_obstacles()
-e.print_environment()
-a = BFSAgent(e)
-print('inicio')
-print((a.env.posY,a.env.posX))
-print('objetivo')
-print((objectivePosY,objectivePosX))
-res = a.think()
-
-
-print(res)'''

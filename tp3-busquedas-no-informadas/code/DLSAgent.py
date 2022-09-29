@@ -59,3 +59,22 @@ class DLSAgent(ObjectiveAgent):
 
         if len(self.frontier) == 0:
                 return []
+
+
+if __name__ == '__main__':
+
+    size = 100
+    dls_limit = 100
+    init_posX = randint(0,99)
+    init_posY = randint(0,99)
+    goal_posX = randint(0,99)
+    goal_posY = randint(0,99)
+    obstacles_rate = 0.08
+    e = env(size,init_posX,init_posY,goal_posX,goal_posY,obstacles_rate)
+    e.generate_obstacles()
+    a = DLSAgent(e,dls_limit)
+    
+    e.print_environment()
+    res = a.think()
+    
+    print(res)

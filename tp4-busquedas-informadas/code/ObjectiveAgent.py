@@ -7,6 +7,14 @@ class ObjectiveAgent:
         self.frontier = []
         self.explored = []
 
+    def reset_agent(self):
+        self.graph = {}
+        self.frontier = []
+        self.explored = []
+
+    def update_env(self,env):
+        self.env = env
+
     def get_path(self,graph,start,goal):
         result = []
         node = goal
@@ -16,5 +24,4 @@ class ObjectiveAgent:
                     result.insert(0,node)
                     node = key
                     break
-        result.insert(0,start)
         return result

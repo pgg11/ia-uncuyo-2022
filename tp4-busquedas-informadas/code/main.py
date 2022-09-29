@@ -3,6 +3,7 @@ from BFSAgent import BFSAgent
 from DFSAgent import DFSAgent
 from DLSAgent import DLSAgent
 from UCSAgent import UCSAgent
+from AstarAgent import AstarAgent
 
 from random import randint
 import gspread
@@ -34,6 +35,7 @@ bfs_results = list()
 dfs_results = list()
 dls_results = list()
 ucs_results = list()
+aStar_results = list()
 
 
 # Simulaciones
@@ -42,6 +44,7 @@ bfs_agent = BFSAgent(environments[0])
 dfs_agent = DFSAgent(environments[0])
 dls_agent = DLSAgent(environments[0],dls_limit)
 ucs_agent = UCSAgent(environments[0])
+aStar_agent = AstarAgent(environments[0])
 
 
 for env in environments:
@@ -75,13 +78,20 @@ for env in environments:
     
     ucs_results.append({'states_explored':ucs_states_explored,'path_lenght':len(ucs_path)})
 
+    aStar_agent.reset_agent()
+    aStar_agent.update_env(env)
+    aStar_path = aStar_agent.think()
+    aStar_states_explored = len(aStar_agent.graph)
+    
+    aStar_results.append({'states_explored':aStar_states_explored,'path_lenght':len(aStar_path)})
+
 
 # Recopilación de resultados en google sheets
 
 scope = ["https://spreadsheets.google.com/feeds",'https://www.googleapis.com/auth/spreadsheets',"https://www.googleapis.com/auth/drive.file","https://www.googleapis.com/auth/drive"]
 creds = ServiceAccountCredentials.from_json_keyfile_name("tp3-busquedas-no-informadas/code/tp3-busqueda-no-informada-5406f79cbf97.json",scope)
 client = gspread.authorize(creds)
-sheet = client.open("no-informada-results").sheet1  #Abrir spreadhseet
+sheet = client.open("informada-results").sheet1  #Abrir spreadhseet
 
 insertRow = ['algorithm_name','run_n','estate_n','solution_found']
 sheet.append_row(insertRow)
@@ -107,6 +117,11 @@ for i in range(simulations):
         ucs_path = "True"
     else:
         ucs_path = "False"  
+    
+    if aStar_results[i]['path_lenght'] > 0:
+        aStar_path = 'True'
+    else:
+        aStar_path = 'False'
 
     run = i+1
 
@@ -114,8 +129,10 @@ for i in range(simulations):
     insertRow2 = ['dfs',run,dfs_results[i]['states_explored'],dfs_path]
     insertRow3 = ['dls',run,dls_results[i]['states_explored'],dls_path]
     insertRow4 = ['ucs',run,ucs_results[i]['states_explored'],ucs_path]
+    insertRow5 = ['a-Star',run,aStar_results[i]['states_explored'],aStar_path]
 
     sheet.append_row(insertRow1)
     sheet.append_row(insertRow2)
     sheet.append_row(insertRow3)
     sheet.append_row(insertRow4)
+    sheet.append_row(insertRow5)

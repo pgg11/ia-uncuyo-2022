@@ -55,8 +55,6 @@
 |random|0,4|1||
 |simple\_reflective|0,4|1||
 |random|0,4|1||
-
-
 |simple\_reflective|0,4|0||
 | - | - | - | - |
 |random|0,4|1||
@@ -149,8 +147,6 @@
 |simple\_reflective|0,4|2||
 |random|0,4|6||
 |simple\_reflective|0,4|2||
-
-
 |random|0,4|6||
 | - | - | - | - |
 |simple\_reflective|0,4|5||
@@ -242,8 +238,6 @@
 |simple\_reflective|0,4|14||
 |random|0,4|20||
 |simple\_reflective|0,4|14||
-
-
 |random|0,4|20||
 | - | - | - | - |
 |simple\_reflective|0,4|7||

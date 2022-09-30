@@ -1,58 +1,645 @@
-| agent              | environment | dirt\_rate | avg\_performance | iter\_1 | iter\_2 | iter\_3 | iter\_4 | iter\_5 | iter\_6 | iter\_7 | iter\_8 | iter\_9 | iter\_10 |
-| ------------------ | ----------- | ---------- | ---------------- | ------- | ------- | ------- | ------- | ------- | ------- | ------- | ------- | ------- | -------- |
-| simple\_reflective | 2           | 0,1        | 0                | 0       | 0       | 0       | 0       | 0       | 0       | 0       | 0       | 0       | 0        |
-| random             | 2           | 0,1        | 0                | 0       | 0       | 0       | 0       | 0       | 0       | 0       | 0       | 0       | 0        |
-| simple\_reflective | 2           | 0,2        | 0                | 0       | 0       | 0       | 0       | 0       | 0       | 0       | 0       | 0       | 0        |
-| random             | 2           | 0,2        | 0                | 0       | 0       | 0       | 0       | 0       | 0       | 0       | 0       | 0       | 0        |
-| simple\_reflective | 2           | 0,4        | 0,8              | 1       | 0       | 1       | 1       | 1       | 0       | 1       | 1       | 1       | 1        |
-| random             | 2           | 0,4        | 1                | 1       | 1       | 1       | 1       | 1       | 1       | 1       | 1       | 1       | 1        |
-| simple\_reflective | 2           | 0,8        | 2,2              | 2       | 2       | 2       | 1       | 1       | 3       | 3       | 2       | 3       | 3        |
-| random             | 2           | 0,8        | 3                | 3       | 3       | 3       | 3       | 3       | 3       | 3       | 3       | 3       | 3        |
-| simple\_reflective | 4           | 0,1        | 0,5              | 1       | 0       | 0       | 0       | 1       | 0       | 1       | 1       | 1       | 0        |
-| random             | 4           | 0,1        | 1                | 1       | 1       | 1       | 1       | 1       | 1       | 1       | 1       | 1       | 1        |
-| simple\_reflective | 4           | 0,2        | 1,6              | 3       | 0       | 2       | 2       | 1       | 3       | 0       | 3       | 1       | 1        |
-| random             | 4           | 0,2        | 3                | 3       | 3       | 3       | 3       | 3       | 3       | 3       | 3       | 3       | 3        |
-| simple\_reflective | 4           | 0,4        | 2,9              | 5       | 3       | 3       | 2       | 4       | 4       | 1       | 1       | 3       | 3        |
-| random             | 4           | 0,4        | 6                | 6       | 6       | 6       | 6       | 6       | 6       | 6       | 6       | 6       | 6        |
-| simple\_reflective | 4           | 0,8        | 6,7              | 1       | 11      | 11      | 9       | 7       | 3       | 2       | 10      | 1       | 12       |
-| random             | 4           | 0,8        | 12               | 12      | 12      | 12      | 12      | 12      | 12      | 12      | 12      | 12      | 12       |
-| simple\_reflective | 8           | 0,1        | 3,6              | 3       | 4       | 3       | 5       | 2       | 6       | 4       | 3       | 3       | 3        |
-| random             | 8           | 0,1        | 5,3              | 6       | 4       | 6       | 5       | 6       | 5       | 4       | 6       | 6       | 5        |
-| simple\_reflective | 8           | 0,2        | 5,7              | 2       | 10      | 4       | 3       | 8       | 2       | 10      | 7       | 1       | 10       |
-| random             | 8           | 0,2        | 10,2             | 11      | 11      | 11      | 10      | 9       | 11      | 12      | 11      | 9       | 7        |
-| simple\_reflective | 8           | 0,4        | 9,7              | 11      | 9       | 11      | 2       | 8       | 12      | 18      | 18      | 2       | 6        |
-| random             | 8           | 0,4        | 21,9             | 21      | 22      | 20      | 21      | 23      | 22      | 21      | 23      | 24      | 22       |
-| simple\_reflective | 8           | 0,8        | 23,3             | 51      | 10      | 2       | 15      | 16      | 34      | 15      | 41      | 38      | 11       |
-| random             | 8           | 0,8        | 41,7             | 43      | 41      | 41      | 43      | 42      | 44      | 40      | 44      | 40      | 39       |
-| simple\_reflective | 16          | 0,1        | 16               | 20      | 1       | 14      | 22      | 23      | 1       | 20      | 12      | 24      | 23       |
-| random             | 16          | 0,1        | 7,5              | 3       | 10      | 10      | 10      | 5       | 9       | 6       | 6       | 11      | 5        |
-| simple\_reflective | 16          | 0,2        | 25,9             | 34      | 9       | 41      | 32      | 16      | 50      | 10      | 25      | 9       | 33       |
-| random             | 16          | 0,2        | 16,4             | 12      | 18      | 13      | 12      | 19      | 13      | 17      | 19      | 20      | 21       |
-| simple\_reflective | 16          | 0,4        | 45,6             | 68      | 36      | 49      | 20      | 45      | 32      | 102     | 10      | 89      | 5        |
-| random             | 16          | 0,4        | 31,8             | 40      | 29      | 26      | 32      | 31      | 31      | 37      | 32      | 29      | 31       |
-| simple\_reflective | 16          | 0,8        | 126,9            | 149     | 178     | 198     | 48      | 146     | 147     | 82      | 46      | 87      | 188      |
-| random             | 16          | 0,8        | 66,1             | 62      | 68      | 72      | 62      | 65      | 67      | 62      | 67      | 70      | 66       |
-| simple\_reflective | 32          | 0,1        | 53,6             | 40      | 3       | 75      | 30      | 55      | 25      | 93      | 48      | 77      | 90       |
-| random             | 32          | 0,1        | 9,6              | 14      | 11      | 10      | 5       | 9       | 14      | 11      | 7       | 9       | 6        |
-| simple\_reflective | 32          | 0,2        | 105,2            | 116     | 125     | 120     | 27      | 117     | 43      | 106     | 133     | 142     | 123      |
-| random             | 32          | 0,2        | 19,5             | 16      | 17      | 15      | 19      | 24      | 16      | 22      | 29      | 19      | 18       |
-| simple\_reflective | 32          | 0,4        | 145,9            | 22      | 192     | 171     | 291     | 125     | 133     | 50      | 119     | 70      | 286      |
-| random             | 32          | 0,4        | 37,9             | 45      | 35      | 34      | 31      | 38      | 48      | 35      | 35      | 43      | 35       |
-| simple\_reflective | 32          | 0,8        | 374,6            | 455     | 455     | 293     | 441     | 450     | 334     | 458     | 323     | 84      | 453      |
-| random             | 32          | 0,8        | 69,7             | 63      | 73      | 75      | 65      | 65      | 65      | 63      | 81      | 70      | 77       |
-| simple\_reflective | 64          | 0,1        | 84,7             | 96      | 101     | 66      | 82      | 87      | 93      | 83      | 86      | 57      | 96       |
-| random             | 64          | 0,1        | 8,7              | 12      | 6       | 7       | 10      | 10      | 7       | 3       | 12      | 8       | 12       |
-| simple\_reflective | 64          | 0,2        | 137,2            | 182     | 161     | 73      | 173     | 163     | 173     | 78      | 20      | 165     | 184      |
-| random             | 64          | 0,2        | 16,7             | 14      | 13      | 17      | 16      | 21      | 18      | 14      | 17      | 16      | 21       |
-| simple\_reflective | 64          | 0,4        | 288,1            | 290     | 285     | 274     | 285     | 302     | 285     | 284     | 296     | 276     | 304      |
-| random             | 64          | 0,4        | 39,6             | 45      | 43      | 31      | 35      | 43      | 33      | 45      | 39      | 41      | 41       |
-| simple\_reflective | 64          | 0,8        | 384,6            | 281     | 446     | 451     | 436     | 440     | 79      | 447     | 439     | 448     | 379      |
-| random             | 64          | 0,8        | 78,5             | 68      | 97      | 87      | 80      | 85      | 75      | 60      | 79      | 76      | 78       |
-| simple\_reflective | 128         | 0,1        | 82,3             | 86      | 94      | 81      | 94      | 84      | 37      | 90      | 86      | 92      | 79       |
-| random             | 128         | 0,1        | 9,3              | 8       | 7       | 10      | 6       | 8       | 11      | 11      | 9       | 12      | 11       |
-| simple\_reflective | 128         | 0,2        | 160,3            | 164     | 161     | 161     | 82      | 165     | 173     | 168     | 183     | 157     | 189      |
-| random             | 128         | 0,2        | 18,8             | 23      | 28      | 18      | 21      | 16      | 18      | 19      | 11      | 22      | 12       |
-| simple\_reflective | 128         | 0,4        | 283,4            | 286     | 267     | 292     | 286     | 272     | 293     | 273     | 291     | 283     | 291      |
-| random             | 128         | 0,4        | 35,5             | 32      | 37      | 39      | 30      | 28      | 34      | 41      | 44      | 39      | 31       |
-| simple\_reflective | 128         | 0,8        | 427,6            | 443     | 453     | 441     | 449     | 446     | 450     | 272     | 437     | 435     | 450      |
-| random             | 128         | 0,8        | 77,3             | 86      | 78      | 73      | 71      | 80      | 74      | 81      | 71      | 86      | 73       |
+## Resultados de performance por tamaño de entorno y porcentaje de tierra
+
+### *Entorno 2x2*
+
+|agent|dirt\_rate|performance|
+| - | - | - |
+|||||
+|simple\_reflective|0,1|0||
+|random|0,1|0||
+|simple\_reflective|0,1|0||
+|random|0,1|0||
+|simple\_reflective|0,1|0||
+|random|0,1|0||
+|simple\_reflective|0,1|0||
+|random|0,1|0||
+|simple\_reflective|0,1|0||
+|random|0,1|0||
+|simple\_reflective|0,1|0||
+|random|0,1|0||
+|simple\_reflective|0,1|0||
+|random|0,1|0||
+|simple\_reflective|0,1|0||
+|random|0,1|0||
+|simple\_reflective|0,1|0||
+|random|0,1|0||
+|simple\_reflective|0,1|0||
+|random|0,1|0||
+|||||
+|simple\_reflective|0,2|0||
+|random|0,2|0||
+|simple\_reflective|0,2|0||
+|random|0,2|0||
+|simple\_reflective|0,2|0||
+|random|0,2|0||
+|simple\_reflective|0,2|0||
+|random|0,2|0||
+|simple\_reflective|0,2|0||
+|random|0,2|0||
+|simple\_reflective|0,2|0||
+|random|0,2|0||
+|simple\_reflective|0,2|0||
+|random|0,2|0||
+|simple\_reflective|0,2|0||
+|random|0,2|0||
+|simple\_reflective|0,2|0||
+|random|0,2|0||
+|simple\_reflective|0,2|0||
+|random|0,2|0||
+|||||
+|simple\_reflective|0,4|1||
+|random|0,4|1||
+|simple\_reflective|0,4|0||
+|random|0,4|1||
+|simple\_reflective|0,4|1||
+|random|0,4|1||
+|simple\_reflective|0,4|1||
+|random|0,4|1||
+
+
+|simple\_reflective|0,4|0||
+| - | - | - | - |
+|random|0,4|1||
+|simple\_reflective|0,4|0||
+|random|0,4|1||
+|simple\_reflective|0,4|1||
+|random|0,4|1||
+|simple\_reflective|0,4|1||
+|random|0,4|1||
+|simple\_reflective|0,4|1||
+|random|0,4|1||
+|simple\_reflective|0,4|0||
+|random|0,4|1||
+|||||
+|simple\_reflective|0,8|1||
+|random|0,8|3||
+|simple\_reflective|0,8|1||
+|random|0,8|3||
+|simple\_reflective|0,8|2||
+|random|0,8|3||
+|simple\_reflective|0,8|1||
+|random|0,8|3||
+|simple\_reflective|0,8|1||
+|random|0,8|3||
+|simple\_reflective|0,8|1||
+|random|0,8|3||
+|simple\_reflective|0,8|3||
+|random|0,8|3||
+|simple\_reflective|0,8|2||
+|random|0,8|3||
+|simple\_reflective|0,8|3||
+|random|0,8|3||
+|simple\_reflective|0,8|3||
+|random|0,8|3||
+
+![Boxplot - 2x2](./2x2_boxplot.png)
+
+### *Entorno 4x4*
+
+|agent|dirt\_rate|performance|
+| - | - | - |
+|simple\_reflective|0,1|1||
+|random|0,1|1||
+|simple\_reflective|0,1|1||
+|random|0,1|1||
+|simple\_reflective|0,1|0||
+|random|0,1|1||
+|simple\_reflective|0,1|1||
+|random|0,1|1||
+|simple\_reflective|0,1|0||
+|random|0,1|1||
+|simple\_reflective|0,1|0||
+|random|0,1|1||
+|simple\_reflective|0,1|0||
+|random|0,1|1||
+|simple\_reflective|0,1|0||
+|random|0,1|1||
+|simple\_reflective|0,1|0||
+|random|0,1|1||
+|simple\_reflective|0,1|0||
+|random|0,1|1||
+|||||
+|simple\_reflective|0,2|1||
+|random|0,2|3||
+|simple\_reflective|0,2|1||
+|random|0,2|3||
+|simple\_reflective|0,2|2||
+|random|0,2|3||
+|simple\_reflective|0,2|3||
+|random|0,2|3||
+|simple\_reflective|0,2|1||
+|random|0,2|3||
+|simple\_reflective|0,2|0||
+|random|0,2|3||
+|simple\_reflective|0,2|2||
+|random|0,2|3||
+|simple\_reflective|0,2|1||
+|random|0,2|3||
+|simple\_reflective|0,2|1||
+|random|0,2|3||
+|simple\_reflective|0,2|2||
+|random|0,2|3||
+|||||
+|simple\_reflective|0,4|0||
+|random|0,4|6||
+|simple\_reflective|0,4|6||
+|random|0,4|6||
+|simple\_reflective|0,4|2||
+|random|0,4|6||
+|simple\_reflective|0,4|2||
+|random|0,4|6||
+|simple\_reflective|0,4|2||
+
+
+|random|0,4|6||
+| - | - | - | - |
+|simple\_reflective|0,4|5||
+|random|0,4|6||
+|simple\_reflective|0,4|4||
+|random|0,4|6||
+|simple\_reflective|0,4|5||
+|random|0,4|5||
+|simple\_reflective|0,4|1||
+|random|0,4|6||
+|simple\_reflective|0,4|3||
+|random|0,4|6||
+|||||
+|simple\_reflective|0,8|9||
+|random|0,8|12||
+|simple\_reflective|0,8|6||
+|random|0,8|12||
+|simple\_reflective|0,8|11||
+|random|0,8|12||
+|simple\_reflective|0,8|12||
+|random|0,8|12||
+|simple\_reflective|0,8|9||
+|random|0,8|12||
+|simple\_reflective|0,8|1||
+|random|0,8|12||
+|simple\_reflective|0,8|2||
+|random|0,8|12||
+|simple\_reflective|0,8|11||
+|random|0,8|12||
+|simple\_reflective|0,8|6||
+|random|0,8|12||
+|simple\_reflective|0,8|5||
+|random|0,8|12||
+
+![Boxplot - 4x4](./4x4_boxplot.png)
+
+### *Entorno 8x8*
+
+|agent|dirt\_rate|performance|
+| - | - | - |
+|simple\_reflective|0,1|2||
+|random|0,1|4||
+|simple\_reflective|0,1|1||
+|random|0,1|6||
+|simple\_reflective|0,1|5||
+|random|0,1|6||
+|simple\_reflective|0,1|1||
+|random|0,1|6||
+|simple\_reflective|0,1|5||
+|random|0,1|6||
+|simple\_reflective|0,1|6||
+|random|0,1|4||
+|simple\_reflective|0,1|0||
+|random|0,1|4||
+|simple\_reflective|0,1|3||
+|random|0,1|4||
+|simple\_reflective|0,1|5||
+|random|0,1|6||
+|simple\_reflective|0,1|6||
+|random|0,1|4||
+|||||
+|simple\_reflective|0,2|2||
+|random|0,2|10||
+|simple\_reflective|0,2|10||
+|random|0,2|10||
+|simple\_reflective|0,2|8||
+|random|0,2|9||
+|simple\_reflective|0,2|11||
+|random|0,2|9||
+|simple\_reflective|0,2|7||
+|random|0,2|10||
+|simple\_reflective|0,2|12||
+|random|0,2|11||
+|simple\_reflective|0,2|8||
+|random|0,2|12||
+|simple\_reflective|0,2|5||
+|random|0,2|8||
+|simple\_reflective|0,2|8||
+|random|0,2|9||
+|simple\_reflective|0,2|8||
+|random|0,2|9||
+|||||
+|simple\_reflective|0,4|21||
+|random|0,4|22||
+|simple\_reflective|0,4|13||
+|random|0,4|20||
+|simple\_reflective|0,4|9||
+|random|0,4|22||
+|simple\_reflective|0,4|14||
+|random|0,4|20||
+|simple\_reflective|0,4|14||
+
+
+|random|0,4|20||
+| - | - | - | - |
+|simple\_reflective|0,4|7||
+|random|0,4|17||
+|simple\_reflective|0,4|9||
+|random|0,4|21||
+|simple\_reflective|0,4|6||
+|random|0,4|21||
+|simple\_reflective|0,4|19||
+|random|0,4|20||
+|simple\_reflective|0,4|0||
+|random|0,4|18||
+|||||
+|simple\_reflective|0,8|2||
+|random|0,8|43||
+|simple\_reflective|0,8|39||
+|random|0,8|42||
+|simple\_reflective|0,8|23||
+|random|0,8|42||
+|simple\_reflective|0,8|32||
+|random|0,8|44||
+|simple\_reflective|0,8|36||
+|random|0,8|44||
+|simple\_reflective|0,8|37||
+|random|0,8|43||
+|simple\_reflective|0,8|37||
+|random|0,8|42||
+|simple\_reflective|0,8|50||
+|random|0,8|42||
+|simple\_reflective|0,8|9||
+|random|0,8|44||
+|simple\_reflective|0,8|11||
+|random|0,8|41||
+
+![Boxplot - 8x8](./8x8_boxplot.png)
+
+### *Entorno 16x16*
+
+|agent|dirt\_rate|performance|
+| - | - | - |
+|simple\_reflective|0,1|4||
+|random|0,1|9||
+|simple\_reflective|0,1|16||
+|random|0,1|6||
+|simple\_reflective|0,1|9||
+|random|0,1|8||
+|simple\_reflective|0,1|24||
+|random|0,1|8||
+|simple\_reflective|0,1|3||
+|random|0,1|7||
+|simple\_reflective|0,1|17||
+|random|0,1|7||
+|simple\_reflective|0,1|16||
+|random|0,1|5||
+|simple\_reflective|0,1|23||
+|random|0,1|7||
+|simple\_reflective|0,1|25||
+|random|0,1|7||
+|simple\_reflective|0,1|17||
+|random|0,1|11||
+|||||
+|simple\_reflective|0,2|3||
+|random|0,2|16||
+|simple\_reflective|0,2|36||
+|random|0,2|24||
+|simple\_reflective|0,2|35||
+|random|0,2|18||
+|simple\_reflective|0,2|1||
+|random|0,2|17||
+|simple\_reflective|0,2|33||
+|random|0,2|20||
+|simple\_reflective|0,2|50||
+|random|0,2|15||
+|simple\_reflective|0,2|29||
+|random|0,2|11||
+|simple\_reflective|0,2|14||
+|random|0,2|16||
+|simple\_reflective|0,2|49||
+|random|0,2|22||
+|simple\_reflective|0,2|13||
+|random|0,2|24||
+|||||
+|simple\_reflective|0,4|65||
+|random|0,4|32||
+|simple\_reflective|0,4|101||
+|random|0,4|30||
+|simple\_reflective|0,4|52||
+|random|0,4|35||
+|simple\_reflective|0,4|60||
+|random|0,4|32||
+|simple\_reflective|0,4|7||
+|random|0,4|36||
+| - | - | - | - |
+|simple\_reflective|0,4|70||
+|random|0,4|28||
+|simple\_reflective|0,4|25||
+|random|0,4|32||
+|simple\_reflective|0,4|30||
+|random|0,4|22||
+|simple\_reflective|0,4|83||
+|random|0,4|28||
+|simple\_reflective|0,4|87||
+|random|0,4|36||
+|||||
+|simple\_reflective|0,8|200||
+|random|0,8|68||
+|simple\_reflective|0,8|199||
+|random|0,8|88||
+|simple\_reflective|0,8|84||
+|random|0,8|72||
+|simple\_reflective|0,8|195||
+|random|0,8|79||
+|simple\_reflective|0,8|156||
+|random|0,8|59||
+|simple\_reflective|0,8|189||
+|random|0,8|79||
+|simple\_reflective|0,8|61||
+|random|0,8|54||
+|simple\_reflective|0,8|190||
+|random|0,8|63||
+|simple\_reflective|0,8|20||
+|random|0,8|77||
+|simple\_reflective|0,8|74||
+|random|0,8|71||
+
+![Boxplot - 16x16](./16x16_boxplot.png)
+
+### *Entorno 32x32*
+
+|agent|dirt\_rate|performance|
+| - | - | - |
+|simple\_reflective|0,1|54||
+|random|0,1|10||
+|simple\_reflective|0,1|91||
+|random|0,1|10||
+|simple\_reflective|0,1|98||
+|random|0,1|4||
+|simple\_reflective|0,1|94||
+|random|0,1|10||
+|simple\_reflective|0,1|13||
+|random|0,1|7||
+|simple\_reflective|0,1|85||
+|random|0,1|7||
+|simple\_reflective|0,1|92||
+|random|0,1|6||
+|simple\_reflective|0,1|72||
+|random|0,1|9||
+|simple\_reflective|0,1|50||
+|random|0,1|7||
+|simple\_reflective|0,1|68||
+|random|0,1|10||
+|||||
+|simple\_reflective|0,2|125||
+|random|0,2|25||
+|simple\_reflective|0,2|51||
+|random|0,2|26||
+|simple\_reflective|0,2|122||
+|random|0,2|26||
+|simple\_reflective|0,2|8||
+|random|0,2|20||
+|simple\_reflective|0,2|42||
+|random|0,2|21||
+|simple\_reflective|0,2|79||
+|random|0,2|24||
+|simple\_reflective|0,2|1||
+|random|0,2|26||
+|simple\_reflective|0,2|42||
+|random|0,2|29||
+|simple\_reflective|0,2|166||
+|random|0,2|17||
+|simple\_reflective|0,2|164||
+|random|0,2|19||
+|||||
+|simple\_reflective|0,4|17||
+|random|0,4|40||
+|simple\_reflective|0,4|228||
+|random|0,4|32||
+|simple\_reflective|0,4|297||
+|random|0,4|49||
+|simple\_reflective|0,4|291||
+|random|0,4|42||
+|simple\_reflective|0,4|164||
+|random|0,4|42||
+| - | - | - | - |
+|simple\_reflective|0,4|207||
+|random|0,4|29||
+|simple\_reflective|0,4|54||
+|random|0,4|39||
+|simple\_reflective|0,4|148||
+|random|0,4|36||
+|simple\_reflective|0,4|286||
+|random|0,4|27||
+|simple\_reflective|0,4|294||
+|random|0,4|25||
+|||||
+|simple\_reflective|0,8|368||
+|random|0,8|79||
+|simple\_reflective|0,8|448||
+|random|0,8|76||
+|simple\_reflective|0,8|455||
+|random|0,8|81||
+|simple\_reflective|0,8|468||
+|random|0,8|69||
+|simple\_reflective|0,8|236||
+|random|0,8|78||
+|simple\_reflective|0,8|450||
+|random|0,8|81||
+|simple\_reflective|0,8|273||
+|random|0,8|85||
+|simple\_reflective|0,8|451||
+|random|0,8|89||
+|simple\_reflective|0,8|461||
+|random|0,8|73||
+|simple\_reflective|0,8|452||
+|random|0,8|74||
+
+![Boxplot - 32x32](./32x32_boxplot.png)
+
+### *Entorno 64x64*
+
+|agent|dirt\_rate|performance|
+| - | - | - |
+|simple\_reflective|0,1|0||
+|random|0,1|10||
+|simple\_reflective|0,1|109||
+|random|0,1|9||
+|simple\_reflective|0,1|89||
+|random|0,1|12||
+|simple\_reflective|0,1|88||
+|random|0,1|7||
+|simple\_reflective|0,1|105||
+|random|0,1|8||
+|simple\_reflective|0,1|80||
+|random|0,1|13||
+|simple\_reflective|0,1|93||
+|random|0,1|9||
+|simple\_reflective|0,1|87||
+|random|0,1|18||
+|simple\_reflective|0,1|74||
+|random|0,1|10||
+|simple\_reflective|0,1|87||
+|random|0,1|11||
+|||||
+|simple\_reflective|0,2|138||
+|random|0,2|16||
+|simple\_reflective|0,2|163||
+|random|0,2|26||
+|simple\_reflective|0,2|146||
+|random|0,2|18||
+|simple\_reflective|0,2|167||
+|random|0,2|17||
+|simple\_reflective|0,2|173||
+|random|0,2|20||
+|simple\_reflective|0,2|27||
+|random|0,2|24||
+|simple\_reflective|0,2|170||
+|random|0,2|17||
+|simple\_reflective|0,2|169||
+|random|0,2|17||
+|simple\_reflective|0,2|140||
+|random|0,2|16||
+|simple\_reflective|0,2|25||
+|random|0,2|23||
+|||||
+|simple\_reflective|0,4|284||
+|random|0,4|37||
+|simple\_reflective|0,4|2||
+|random|0,4|43||
+|simple\_reflective|0,4|292||
+|random|0,4|39||
+|simple\_reflective|0,4|306||
+|random|0,4|42||
+|simple\_reflective|0,4|288||
+|random|0,4|31||
+| - | - | - | - |
+|simple\_reflective|0,4|284||
+|random|0,4|38||
+|simple\_reflective|0,4|284||
+|random|0,4|38||
+|simple\_reflective|0,4|301||
+|random|0,4|39||
+|simple\_reflective|0,4|285||
+|random|0,4|37||
+|simple\_reflective|0,4|280||
+|random|0,4|33||
+|||||
+|simple\_reflective|0,8|457||
+|random|0,8|71||
+|simple\_reflective|0,8|454||
+|random|0,8|75||
+|simple\_reflective|0,8|461||
+|random|0,8|73||
+|simple\_reflective|0,8|440||
+|random|0,8|78||
+|simple\_reflective|0,8|446||
+|random|0,8|75||
+|simple\_reflective|0,8|241||
+|random|0,8|63||
+|simple\_reflective|0,8|457||
+|random|0,8|94||
+|simple\_reflective|0,8|264||
+|random|0,8|75||
+|simple\_reflective|0,8|437||
+|random|0,8|86||
+|simple\_reflective|0,8|462||
+|random|0,8|75||
+
+![Boxplot - 64x64](./64x64_boxplot.png)
+
+### *Entorno 128x128*
+
+|agent|dirt\_rate|performance|
+| - | - | - |
+|simple\_reflective|0,1|94||
+|random|0,1|8||
+|simple\_reflective|0,1|91||
+|random|0,1|6||
+|simple\_reflective|0,1|100||
+|random|0,1|12||
+|simple\_reflective|0,1|105||
+|random|0,1|6||
+|simple\_reflective|0,1|90||
+|random|0,1|6||
+|simple\_reflective|0,1|88||
+|random|0,1|6||
+|simple\_reflective|0,1|86||
+|random|0,1|7||
+|simple\_reflective|0,1|97||
+|random|0,1|12||
+|simple\_reflective|0,1|109||
+|random|0,1|7||
+|simple\_reflective|0,1|92||
+|random|0,1|10||
+|||||
+|simple\_reflective|0,2|184||
+|random|0,2|23||
+|simple\_reflective|0,2|183||
+|random|0,2|21||
+|simple\_reflective|0,2|157||
+|random|0,2|22||
+|simple\_reflective|0,2|145||
+|random|0,2|13||
+|simple\_reflective|0,2|178||
+|random|0,2|30||
+|simple\_reflective|0,2|170||
+|random|0,2|19||
+|simple\_reflective|0,2|177||
+|random|0,2|25||
+|simple\_reflective|0,2|149||
+|random|0,2|21||
+|simple\_reflective|0,2|175||
+|random|0,2|23||
+|simple\_reflective|0,2|170||
+|random|0,2|20||
+|||||
+|simple\_reflective|0,4|283||
+|random|0,4|35||
+|simple\_reflective|0,4|284||
+|random|0,4|59||
+|simple\_reflective|0,4|288||
+|random|0,4|37||
+|simple\_reflective|0,4|297||
+|random|0,4|29||
+|simple\_reflective|0,4|289||
+|random|0,4|31||
+| - | - | - | - |
+|simple\_reflective|0,4|290||
+|random|0,4|38||
+|simple\_reflective|0,4|286||
+|random|0,4|32||
+|simple\_reflective|0,4|287||
+|random|0,4|44||
+|simple\_reflective|0,4|107||
+|random|0,4|47||
+|simple\_reflective|0,4|284||
+|random|0,4|41||
+|||||
+|simple\_reflective|0,8|454||
+|random|0,8|90||
+|simple\_reflective|0,8|448||
+|random|0,8|93||
+|simple\_reflective|0,8|158||
+|random|0,8|83||
+|simple\_reflective|0,8|440||
+|random|0,8|61||
+|simple\_reflective|0,8|454||
+|random|0,8|73||
+|simple\_reflective|0,8|451||
+|random|0,8|74||
+|simple\_reflective|0,8|451||
+|random|0,8|83||
+|simple\_reflective|0,8|438||
+|random|0,8|77||
+|simple\_reflective|0,8|448||
+|random|0,8|78||
+|simple\_reflective|0,8|447||
+|random|0,8|76||
+
+![Boxplot - 128x128](./128x128_boxplot.png)

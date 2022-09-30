@@ -4,10 +4,12 @@ from random import randint
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
+from time import sleep
+
 
 #   Funcion que corre cada simulación
 
-def run_simulation(size,dirt_rate):
+def run_simulation(size,dirt_rate,iterations):
 
 
 
@@ -50,46 +52,46 @@ dirt_rates = [0.1,0.2,0.4,0.8]
 #Lista con los resultados de todas las simulaciones, inicialmente vacío
 results = list()
 #   Entornos de 2x2
-results.append(run_simulation(sizes[0],dirt_rates[0]))
-results.append(run_simulation(sizes[0],dirt_rates[1]))
-results.append(run_simulation(sizes[0],dirt_rates[2]))
-results.append(run_simulation(sizes[0],dirt_rates[3]))
+results.append(run_simulation(sizes[0],dirt_rates[0],iterations))
+results.append(run_simulation(sizes[0],dirt_rates[1],iterations))
+results.append(run_simulation(sizes[0],dirt_rates[2],iterations))
+results.append(run_simulation(sizes[0],dirt_rates[3],iterations))
 
 #   Entornos de 4x4
-results.append(run_simulation(sizes[1],dirt_rates[0]))
-results.append(run_simulation(sizes[1],dirt_rates[1]))
-results.append(run_simulation(sizes[1],dirt_rates[2]))
-results.append(run_simulation(sizes[1],dirt_rates[3]))
+results.append(run_simulation(sizes[1],dirt_rates[0],iterations))
+results.append(run_simulation(sizes[1],dirt_rates[1],iterations))
+results.append(run_simulation(sizes[1],dirt_rates[2],iterations))
+results.append(run_simulation(sizes[1],dirt_rates[3],iterations))
 
 #   Entornos de 8x8
-results.append(run_simulation(sizes[2],dirt_rates[0]))
-results.append(run_simulation(sizes[2],dirt_rates[1]))
-results.append(run_simulation(sizes[2],dirt_rates[2]))
-results.append(run_simulation(sizes[2],dirt_rates[3]))
+results.append(run_simulation(sizes[2],dirt_rates[0],iterations))
+results.append(run_simulation(sizes[2],dirt_rates[1],iterations))
+results.append(run_simulation(sizes[2],dirt_rates[2],iterations))
+results.append(run_simulation(sizes[2],dirt_rates[3],iterations))
 
 #   Entornos de 16x16
-results.append(run_simulation(sizes[3],dirt_rates[0]))
-results.append(run_simulation(sizes[3],dirt_rates[1]))
-results.append(run_simulation(sizes[3],dirt_rates[2]))
-results.append(run_simulation(sizes[3],dirt_rates[3]))
+results.append(run_simulation(sizes[3],dirt_rates[0],iterations))
+results.append(run_simulation(sizes[3],dirt_rates[1],iterations))
+results.append(run_simulation(sizes[3],dirt_rates[2],iterations))
+results.append(run_simulation(sizes[3],dirt_rates[3],iterations))
 
 #   Entornos de 32x32
-results.append(run_simulation(sizes[4],dirt_rates[0]))
-results.append(run_simulation(sizes[4],dirt_rates[1]))
-results.append(run_simulation(sizes[4],dirt_rates[2]))
-results.append(run_simulation(sizes[4],dirt_rates[3]))
+results.append(run_simulation(sizes[4],dirt_rates[0],iterations))
+results.append(run_simulation(sizes[4],dirt_rates[1],iterations))
+results.append(run_simulation(sizes[4],dirt_rates[2],iterations))
+results.append(run_simulation(sizes[4],dirt_rates[3],iterations))
 
 #   Entornos de 64x64
-results.append(run_simulation(sizes[5],dirt_rates[0]))
-results.append(run_simulation(sizes[5],dirt_rates[1]))
-results.append(run_simulation(sizes[5],dirt_rates[2]))
-results.append(run_simulation(sizes[5],dirt_rates[3]))
+results.append(run_simulation(sizes[5],dirt_rates[0],iterations))
+results.append(run_simulation(sizes[5],dirt_rates[1],iterations))
+results.append(run_simulation(sizes[5],dirt_rates[2],iterations))
+results.append(run_simulation(sizes[5],dirt_rates[3],iterations))
 
 #   Entornos de 128x128
-results.append(run_simulation(sizes[6],dirt_rates[0]))
-results.append(run_simulation(sizes[6],dirt_rates[1]))
-results.append(run_simulation(sizes[6],dirt_rates[2]))
-results.append(run_simulation(sizes[6],dirt_rates[3]))
+results.append(run_simulation(sizes[6],dirt_rates[0],iterations))
+results.append(run_simulation(sizes[6],dirt_rates[1],iterations))
+results.append(run_simulation(sizes[6],dirt_rates[2],iterations))
+results.append(run_simulation(sizes[6],dirt_rates[3],iterations))
 
 #   Recopilación de los resultados en una hoja de calculo de google
 
@@ -97,13 +99,18 @@ scope = ["https://spreadsheets.google.com/feeds",'https://www.googleapis.com/aut
 creds = ServiceAccountCredentials.from_json_keyfile_name("tp2-agentes-racionales/code/tp2-agentes-racionales-86fcc92c5d7a.json", scope)
 client = gspread.authorize(creds)
 sheet = client.open("results").sheet1  #Abrir spreadhseet
-data = sheet.get_all_records()  #Obtener todos los registros
 
-insertRow = ['agent','environment','dirt_rate','avg_performance','iter_1','iter_2','iter_3','iter_4','iter_5','iter_6','iter_7','iter_8','iter_9','iter_10']
+insertRow = ['agent','dirt_rate','performance']
 sheet.append_row(insertRow)
+sizes = ['2x2','4x4','8x8','16x16','32x32','64x64','128x128']
+size = 0
 
 for result in results:
-    insertRow1 = ['simple_reflective',str(result['size'])+'x'+str(result['size']),result['dirt_rate'],result['simple_agent_avg']]+result['simple_agent_performances'] #Preparando lista a insertar
-    insertRow2 = ['random',str(result['size'])+'x'+str(result['size']),result['dirt_rate'],result['random_agent_avg']]+result['random_agent_performances'] #Preparando lista a insertar
-    sheet.append_row(insertRow1)
-    sheet.append_row(insertRow2)
+    insertRow = [result['size']]
+    sheet.append_row(insertRow)
+    for i in range(10):
+        insertRow1 = ['simple_reflective',result['dirt_rate'],result['simple_agent_performances'][i]] #Preparando lista a insertar
+        insertRow2 = ['random',result['dirt_rate'],result['random_agent_performances'][i]] #Preparando lista a insertar
+        sheet.append_row(insertRow1)
+        sheet.append_row(insertRow2)
+    sleep(60)

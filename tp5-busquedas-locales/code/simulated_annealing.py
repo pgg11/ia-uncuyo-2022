@@ -98,9 +98,9 @@ class SimulatedAnnealingAgent:
         current_state = self.env.copy()
         current_h = self.calculate_h(current_state)
 
-        iter = 0
+        states = 1
 
-        while iter < max_states and current_h !=0:
+        while states < max_states and current_h !=0:
 
             rand_column = randint(0,board_len-1)
             rand_line = randint(0,board_len-1)
@@ -113,6 +113,7 @@ class SimulatedAnnealingAgent:
                 current_state = posible_state
                 current_h = posible_h
                 self.states.append(current_state)
+                states += 1
             elif posible_h > current_h:
                 cost_increase = posible_h - current_h
                 p = pow(e,(-cost_increase/t)) * 100
@@ -122,10 +123,10 @@ class SimulatedAnnealingAgent:
                     current_state = posible_state
                     current_h = posible_h
                     self.states.append(current_state)
+                    states += 1
                 
                 t = t*0.60
             
-            iter += 1
 
 
         
@@ -149,3 +150,4 @@ if __name__ == '__main__':
         print(f"Estado final: {final_state}")
         print(f"h = {final_h}")
         print(f"Cantidad de estados alcanzados: {len(a.states)}")
+        print("----------------------------------------------------")

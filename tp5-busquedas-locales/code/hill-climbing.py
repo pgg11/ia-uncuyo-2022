@@ -162,4 +162,5 @@ if __name__ == '__main__':
         print(f"Estado final: {final_state}")
         print(f"h = {final_h}")
         print(f"Cantidad de estados alcanzados: {len(a.states)}")
+        print("----------------------------------------------------")
 

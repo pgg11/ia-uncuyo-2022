@@ -1,4 +1,5 @@
 from random import randint
+import time
 
 class GeneticAgent():
 
@@ -126,18 +127,22 @@ class GeneticAgent():
         rand_line = randint(0,individual_len-1)
         individual[rand_column] = rand_line
     
-    def genetic_algorithm(self):
+    def genetic_algorithm(self,max_time):
+
+        h_variation = list()
 
         population_qnty = 100
         population = self.generate_population(population_qnty)
         population = self.select_best_solutions(population)
 
-        iter = 0
+        init_time = time.time()
         best_h = None
         childs = 0
         best_child = list()
 
-        while best_h != 0 and iter < 500:
+        time_elapsed = round(time.time() - init_time , 4)
+
+        while best_h != 0 and time_elapsed < max_time:
 
             new_population = list()
             for i in range(len(population)):
@@ -151,8 +156,10 @@ class GeneticAgent():
 
                 if best_h == None:
                     best_h = offspring_h
+                    h_variation.append(best_h)
                 elif offspring_h < best_h:
                     best_h = offspring_h
+                    h_variation.append(best_h)
                     best_child = offspring.copy()
                 
                 if best_h == 0:
@@ -160,21 +167,24 @@ class GeneticAgent():
                 
                 new_population.append(offspring)
             
-            iter += 1
+            time_elapsed = round(time.time() - init_time , 4)
+        time_elapsed = str(time_elapsed)
         
-        return best_child,best_h,childs
+        return ([best_child,best_h,childs,time_elapsed,h_variation])
 
 if __name__ == '__main__':
     
     queen_n = [4,8,10]
+    max_time = 30
 
     for n in queen_n:
         print(f"Cantidad de reinas: {n}")
 
         a = GeneticAgent(n)
 
-        final_state,final_h,childs = a.genetic_algorithm()
+        final_state,final_h,childs,time_elapsed,h_variation = a.genetic_algorithm(max_time)
         print(f"Estado final: {final_state}")
         print(f"h = {final_h}")
         print(f"Cantidad de hijos hasta la solución: {childs}")
+        print((f"Tiempo transcurrido hasta la solución: {time_elapsed} segundos"))
         print("--------------------------------------------------")

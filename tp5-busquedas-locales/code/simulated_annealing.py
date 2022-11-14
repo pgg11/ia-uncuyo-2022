@@ -1,6 +1,7 @@
 from cmath import e
 from math import pow
 from random import randint
+import time
 
 
 class SimulatedAnnealingAgent:
@@ -92,15 +93,17 @@ class SimulatedAnnealingAgent:
         
         return board
 
-    def simulated_annealing(self,t,max_states):
-
+    def simulated_annealing(self,t,max_time):
+        h_variation = list()
+        init_time = time.time()
         board_len = len(self.env)
         current_state = self.env.copy()
         current_h = self.calculate_h(current_state)
+        h_variation.append(current_h)
 
-        states = 1
+        time_elapsed = round(time.time() - init_time , 4)
 
-        while states < max_states and current_h !=0:
+        while time_elapsed < max_time and current_h !=0:
 
             rand_column = randint(0,board_len-1)
             rand_line = randint(0,board_len-1)
@@ -113,7 +116,7 @@ class SimulatedAnnealingAgent:
                 current_state = posible_state
                 current_h = posible_h
                 self.states.append(current_state)
-                states += 1
+                h_variation.append(current_h)
             elif posible_h > current_h:
                 cost_increase = posible_h - current_h
                 p = pow(e,(-cost_increase/t)) * 100
@@ -122,20 +125,26 @@ class SimulatedAnnealingAgent:
                 if decision <= p:
                     current_state = posible_state
                     current_h = posible_h
+                    h_variation.append(current_h)
                     self.states.append(current_state)
-                    states += 1
                 
                 t = t*0.60
             
 
+            time_elapsed = round(time.time() - init_time , 4)
+        time_elapsed = str(time_elapsed)
+        
+        states_explored = len(self.states)
+            
+
 
         
-        return (current_state,current_h)
+        return ([current_state,current_h,states_explored,time_elapsed,h_variation])
     
 if __name__ == '__main__':
     
     queen_n = [4,8,10]
-    max_states = 100
+    max_time = 30
     t = 100
     for n in queen_n:
         print(f"Cantidad de reinas: {n}")
@@ -146,8 +155,9 @@ if __name__ == '__main__':
 
         a = SimulatedAnnealingAgent(env)
 
-        final_state,final_h = a.simulated_annealing(t,max_states)
+        final_state,final_h,states,time_elapsed,h_variation = a.simulated_annealing(t,max_time)
         print(f"Estado final: {final_state}")
         print(f"h = {final_h}")
-        print(f"Cantidad de estados alcanzados: {len(a.states)}")
+        print(f"Cantidad de estados alcanzados: {states}")
+        print((f"Tiempo transcurrido hasta la solución: {time_elapsed} segundos"))
         print("----------------------------------------------------")

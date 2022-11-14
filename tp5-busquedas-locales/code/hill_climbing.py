@@ -1,4 +1,5 @@
 from random import randint
+import time
 
 
 class HillClimbingAgent():
@@ -93,13 +94,18 @@ class HillClimbingAgent():
     
     
 
-    def hillClimbing(self,max_states):
+    def hillClimbing(self,max_time):
+        h_variation = list()
         states_explored = len(self.states)
+        init_time = time.time()
         state = self.env.copy()
         h = self.calculate_h(state)
+        time_elapsed = round(time.time() - init_time , 1)
+        h_variation.append(h)
 
-        while states_explored < max_states and h!=0:
-
+        while time_elapsed < max_time and h!=0:
+            
+            
             board = self.clac_heuristic(state)
             line,column = self.find_min_cost_indexes(board)
 
@@ -108,11 +114,16 @@ class HillClimbingAgent():
                 self.states.append(new_state)
             
             state[column] = line
-            h = self.calculate_h(state)
+            new_h = self.calculate_h(state)
+            if new_h != h:
+                h_variation.append(h)
+            h = new_h
 
             states_explored = len(self.states)
+            time_elapsed = round(time.time() - init_time , 4)
+        time_elapsed = str(time_elapsed)
         
-        return (state,h)
+        return ([state,h,states_explored,time_elapsed,h_variation])
 
     def find_min_cost_indexes(self,board):
         minimum_value = None
@@ -148,7 +159,7 @@ class HillClimbingAgent():
 if __name__ == '__main__':
     
     queen_n = [4,8,10]
-    max_states = 30
+    max_time = 30
     for n in queen_n:
         print(f"Cantidad de reinas: {n}")
         env = list()
@@ -158,9 +169,14 @@ if __name__ == '__main__':
 
         a = HillClimbingAgent(env)
 
-        final_state,final_h = a.hillClimbing(max_states)
+        result = a.hillClimbing(max_time)
+        final_state = result[0]
+        final_h = result[1]
+        states = result[2]
+        time_elapsed = result[3]
         print(f"Estado final: {final_state}")
         print(f"h = {final_h}")
-        print(f"Cantidad de estados alcanzados: {len(a.states)}")
+        print(f"Cantidad de estados alcanzados: {states}")
+        print((f"Tiempo transcurrido hasta la solución: {time_elapsed} segundos"))
         print("----------------------------------------------------")
 

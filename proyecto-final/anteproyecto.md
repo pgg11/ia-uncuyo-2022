@@ -1,7 +1,6 @@
-# Desempeño de **algoritmo*** de reinforcement learning en Quoridor
+# Desempeño y búsqueda de políticas de agente Reinforcement Learning en Quoridor
 
-**Falta decidir algoritmo***
-Q-learning?
+### DYBPARLQ
 
 ## 
 
@@ -31,19 +30,15 @@ A pesar del conjunto de reglas relativamente simplista, Quoridor es un juego des
 
 ## Objetivos
 
-Así, el objetivo central de este proyecto es analizar el desempeño de un agente RL e identificar factores discretos que contribuyen a la predicción óptima de políticas... 
+Así, el objetivo central de este proyecto es analizar el desempeño de un agente RL e identificar factores discretos que contribuyen a la predicción óptima de políticas. Para esto, se comparará la performance del agente RL contrastandolo con un agente determinístico. En principio el agente utilizará técnicas de Q-learning, pero no se descarta buscar otras potenciales soluciones.
 
-**Compararlo con un algoritmo de fuerza bruta??***
+### **Explicación de la estrategia del agente determinístico**
 
-Completar...
-
+El agente determinístico buscará avanzar hacia el objetivo moviendose hacia adelante a menos que se le bloquee el camino con una pared, en tal caso antes de moverse hacia alguno de los costados para esquivar la pared(la dirección horizontal se eligirá de manera aleatoria), buscará bloquear al peón contrario ubicandole primero paredes en los costados(de manera vertical), calculando la distancia que se podrá mover el contricante antes de pasar las paredes para atrapanr al peon contrario con paredes en forma de "U". Estas acciones las realizará siempre y cuando la distancia del peón contrario sea lo suficientemente lejana para poder armar la trampa en U, en caso contrario seguirá buscando moverse para avanzar hacia la meta.
 
 ## Alcance y limitaciones
 
-Investigadores descubrieron que el factor de bifurcación en un juego como Quoridor era demasiado grande para producir una solución de terminal. En cambio, usaron una profundidad limitada para tratar de evaluar la utilidad de la posición del juego después de un cierto conjunto de movimientos en un futuro cercano. Si bien el agente no pudo jugar tan bien como un humano, proporcionó una buena base para el trabajo futuro...
-
-Completar...
-
+Investigadores descubrieron que el factor de bifurcación en un juego como Quoridor era demasiado grande para producir una solución de terminal. En cambio, usaron una profundidad limitada para tratar de evaluar la utilidad de la posición del juego después de un cierto conjunto de movimientos en un futuro cercano. Si bien el agente no pudo jugar tan bien como un humano, proporcionó una buena base para el trabajo futuro.
 
 ## Metricas
 
@@ -55,7 +50,16 @@ En principio los movimientos laterales y posicionamiento de paredes no sumarian 
 
 ## Listado de actividades a realizar
 
-To do
+    1-  Búsqueda y lectura de bibliografía de Reinforcement Learning. [7-10 días]
+    2-  Planteo de la posible solución. [2-3 días]
+    3-  Codificación del entorno y el agente determinítico. [7-10 días]
+    4-  Codificación del agente RL. [5-7 días]
+    5-  Recopilación de datos de las simulaciones. [2 días]
+    6-  Analisis de los datos obtenidos. [2-3 días]
+    7-  Desarrollo del informe del proyecto. [4 días]
 
 ## Referencias
 
+AIMA 3ra edición
+Quoridor-AI - Chris Jose, Sakshum Kulshrestha, Chenyi Ling, Xiaoyur Liu, Ben Moskowitz
+Monte Carlo Tree Search for Quoridor - Victor Massagué Respall, Joseph Alexander Brown, Hamna Aslam

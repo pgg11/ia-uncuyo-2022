@@ -58,6 +58,8 @@ En principio los movimientos laterales y posicionamiento de paredes no sumarian 
     6-  Analisis de los datos obtenidos. [2-3 días]
     7-  Desarrollo del informe del proyecto. [4 días]
 
+![gantt](./gantt.png)
+
 ## Referencias
 
 AIMA 3ra edición

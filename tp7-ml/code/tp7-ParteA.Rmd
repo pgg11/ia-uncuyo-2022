@@ -1,0 +1,349 @@
+```{r}
+library(dplyr)
+library(readr)
+library(ggplot2)
+```
+
+
+```{r}
+#Parte A
+
+#Ejercicio 1
+
+#Carga archivo CSV en una nueva variable
+arboladoMza <-read.csv("/home/pablo/Repositorios/ia-uncuyo-2022/tp7-ml/data/arbolado-mza-dataset.csv")
+
+#Calcula la cantidad de filas del csv
+rows<-nrow(arboladoMza)
+
+#Genera un array de indices aleatorios de las filas del csv original
+randomIndexes<-sample(seq(1:rows),size=(rows*0.8),replace=FALSE)
+
+#Crea un nuevo csv a partir del dataset con los indices cargados en la variable anterior
+training <- arboladoMza[randomIndexes,]
+
+#Crea un nuevo csv a partir del dataset anterior quitandole los indices usados para el csv training
+testing <- arboladoMza[-randomIndexes,]
+
+#Guarda los csv creados
+#write.csv(testing,"/home/pablo/Repositorios/ia-uncuyo-2022/tp7-ml/data/arbolado-publico-mendoza-2021-validation.csv")
+#write.csv(training,"/home/pablo/Repositorios/ia-uncuyo-2022/tp7-ml/data/arbolado-publico-mendoza-2021-train.csv")
+```
+
+```{r}
+#Ejercicio 2
+
+#a)
+
+inclinacionPeligrosa <- subset(training, select = c('id','inclinacion_peligrosa')) %>% count(inclinacion_peligrosa)
+inclinacionPeligrosa$peligrosidad <- ifelse(inclinacionPeligrosa$inclinacion_peligrosa == 0, "No peligroso","Peligroso")
+
+ggplot(data=inclinacionPeligrosa, aes(x=peligrosidad, y=n))+
+  geom_bar(stat="identity", color="blue", fill="steelblue")+
+  geom_text(aes(label=n), vjust=1.6, color="white", size=3.5)+
+  theme_minimal()
+
+#b)
+
+training$inclinacion_peligrosa <- factor(training$inclinacion_peligrosa)
+
+seccionPeligrosa <- subset(training,training$inclinacion_peligrosa == 1,
+                             c('id','seccion','nombre_seccion','inclinacion_peligrosa')) %>%
+                             count(nombre_seccion)
+
+secciones <- subset(training,select =
+                             c('id','seccion','nombre_seccion','inclinacion_peligrosa')) %>%
+                             count(nombre_seccion)
+
+ggplot(data = secciones, mapping = aes(x=n,y=nombre_seccion))+
+  geom_bar(stat="identity", color="blue", fill="steelblue")+
+  geom_text(aes(label=n), hjust=-0.2, color="black", size=3.5)+
+  theme_minimal()
+
+
+ggplot(data = seccionPeligrosa, mapping = aes(x=n,y=nombre_seccion))+
+  geom_bar(stat="identity", color="black", fill="red")+
+  geom_text(aes(label=n), hjust=-0.2, color="black", size=3.5)+
+  theme_minimal()
+
+# La sección con más arboles con inclinacion peligrosa es la Residencial sur
+
+#c) 
+
+especiePeligrosa <- subset(training,training$inclinacion_peligrosa == 1,
+                           c('id','especie','inclinacion_peligrosa')) %>% count(especie)
+
+especies <- subset(training,select = c('id','especie','inclinacion_peligrosa')) %>%
+                           count(especie)
+
+ggplot(data = especies, aes(x=n,y=especie))+
+  geom_bar(stat="identity", color="blue", fill="steelblue")+
+  geom_text(aes(label=n),hjust=-0.2, color="black", size=3)+
+  theme_minimal()
+
+ggplot(data = especiePeligrosa, aes(x=n,y=especie))+
+  geom_bar(stat="identity", color="black", fill="red")+
+  geom_text(aes(label=n),hjust=-0.2, color="black", size=3)+
+  theme_minimal()
+
+# La especie con más arboles con inclinación peligrosa es la Morera
+```
+
+
+```{r}
+#Ejercicio 3
+
+circ_troncos <- subset(training,select =  c('id', 'circ_tronco_cm','inclinacion_peligrosa'))
+
+# b)  
+
+ggplot(data = circ_troncos, mapping = aes(x = circ_tronco_cm)) +
+  geom_histogram(bins = 40)
+
+ggplot(data = circ_troncos, mapping = aes(x = circ_tronco_cm)) +
+  geom_histogram(bins = 75)
+
+ggplot(data = circ_troncos, mapping = aes(x = circ_tronco_cm)) +
+  geom_histogram(bins = 100)
+
+
+# c)
+
+
+ggplot(data = circ_troncos, mapping = aes(x = circ_tronco_cm, 
+                                          fill=factor(inclinacion_peligrosa))) +
+  geom_histogram(bins = 40)+
+  scale_fill_discrete("Peligroso",labels=c("No","Si"))
+
+ggplot(data = circ_troncos, mapping = aes(x = circ_tronco_cm, 
+                                          fill=factor(inclinacion_peligrosa))) +
+  geom_histogram(bins = 75)+
+  scale_fill_discrete("Peligroso",labels=c("No","Si"))
+
+ggplot(data = circ_troncos, mapping = aes(x = circ_tronco_cm, 
+                                          fill=factor(inclinacion_peligrosa))) +
+  geom_histogram(bins = 100)+
+  scale_fill_discrete("Peligroso",labels=c("No","Si"))
+
+
+# d)
+
+training$circ_tronco_cm_cat <- cut(circ_troncos$circ_tronco_cm, breaks = c(0, 80, 160, 240, Inf), labels = c("bajo", "medio", "alto","muy alto"))
+
+write.csv(training,"/home/pablo/Repositorios/ia-uncuyo-2022/tp7-ml/data/arbolado-publico-mendoza-2021-circ_tronco_cm-train.csv")
+
+```
+
+```{r}
+#Ejercicio 4
+
+# a)
+
+create_prediction_prob <- function(dataframe){
+  rows <- nrow(dataframe)
+  dataframe$prediction_prob <- runif(rows, min=0, max=1)
+  
+  return(dataframe)
+}
+
+# b)
+
+random_classifier <- function(dataframe){
+  dataframe <- create_prediction_prob(dataframe)
+  dataframe$prediction_class <- ifelse(dataframe$prediction_prob > 0.5, 1,0)
+  
+  return(dataframe)
+}
+
+# c)
+
+random_validation <- read.csv("/home/pablo/Repositorios/ia-uncuyo-2022/tp7-ml/data/arbolado-publico-mendoza-2021-validation.csv")
+
+
+random_validation <- random_classifier(random_validation)
+
+# d)
+
+confusion_Matrix<-function(actual_class,predicted_class){
+  n<-length(actual_class)
+  predicted<-predicted_class[actual_class == predicted_class]
+  notpredicted<-predicted_class[!(actual_class == predicted_class)]
+  TP <-length(predicted[predicted == 1])
+  TN <-length(predicted[predicted == 0])
+  FP <-length(notpredicted[notpredicted == 1])
+  FN <-length(notpredicted[notpredicted == 0])
+  f1 <-c(n,"Predicted Positive","Predicted Negative")
+  f2 <-c("Actual Positive",TP,FN)
+  f3 <-c("Actual Negative",FP,TN)
+  cofusionMatrix <- rbind(f1,f2,f3)
+  return(cofusionMatrix)
+}
+
+r_cm <- confusion_Matrix(random_validation$inclinacion_peligrosa,random_validation$prediction_class)
+r_cm
+
+```
+
+```{r}
+#Ejercicio 5
+
+# a)
+
+biggerclass_classifier <- function(dataframe){
+  
+  bc <- dataframe %>% count(inclinacion_peligrosa)
+
+  n_1 <- nrow(bc[bc$inclinacion_peligrosa == 1])
+  n_0 <- nrow(bc[bc$inclinacion_peligrosa == 0])
+  
+  dataframe <- dataframe %>% mutate(prediction_class = if_else(n_1 > n_0, 1, 0))
+  
+  return(dataframe)
+}
+
+# b)
+
+bc_validation <- read.csv("/home/pablo/Repositorios/ia-uncuyo-2022/tp7-ml/data/arbolado-publico-mendoza-2021-validation.csv")
+
+bc_validation <- biggerclass_classifier(bc_validation)
+bc_cm <- confusion_Matrix(bc_validation$inclinacion_peligrosa,bc_validation$prediction_class)
+bc_cm
+```
+
+```{r}
+# Ejercicio 6
+
+sensitivity <- function(TP,FN) round(TP/(TP+FN),2)
+specificity <- function(TN,FP) round(TN/(TN+FP),2)
+precision <- function(TP,FP) round(TP/(TP+FP),2)
+negative_Predictive_Value <- function(TN,FN) round(TN/(TN+FN),2)
+accuracy <- function(TP,TN,FP,FN) round((TP+TN)/(TP+TN+FP+FN),2)
+
+metrics_confusion_Matrix<-function(actual_class,predicted_class){
+  n <- length(actual_class)
+  predicted <- predicted_class[actual_class == predicted_class]
+  notpredicted <- predicted_class[!(actual_class == predicted_class)]
+  TP <- length(predicted[predicted == 1])
+  TN <- length(predicted[predicted == 0])
+  FP <- length(notpredicted[notpredicted == 1])
+  FN <- length(notpredicted[notpredicted == 0])
+  row1 <- c(n,"Predicted Positive","Predicted Negative"," ")
+  row2 <- c("Actual Positive",TP,FN,sensitivity(TP,FN))
+  row3 <- c("Actual Negative",FP,TN,specificity(TN,FP))
+  row4 <- c(" ",precision(TP,FP),negative_Predictive_Value(TN,FN),accuracy(TP,TN,FP,FN))
+  confusionMatrix <- rbind(row1,row2,row3,row4)
+  return(confusionMatrix)
+}
+
+r_cm2 <- metrics_confusion_Matrix(random_validation$inclinacion_peligrosa,random_validation$prediction_class)
+r_cm2
+
+bc_cm2 <- metrics_confusion_Matrix(bc_validation$inclinacion_peligrosa,bc_validation$prediction_class)
+bc_cm2
+
+```
+
+```{r}
+# Ejercicio 7
+
+
+# a)
+
+create_folds <- function(dataframe,folds_num){
+  
+  folds <- list()
+  rows <- nrow(dataframe)
+  fold_len <- as.integer(rows / folds_num)
+  remaining_indexes = seq(1:rows)
+  
+  for (i in 1:folds_num){
+    fold_indexes <- sample(remaining_indexes,fold_len,replace=FALSE)
+    folds[[i]] <- dataframe[fold_indexes,]
+    remaining_indexes <- setdiff(remaining_indexes, fold_indexes)
+  }
+  
+  return(folds)
+}
+
+
+# b)
+
+mean_std_confusion_matrix <- function (results,folds_num){
+  TPV<-c()
+  TNV<-c()
+  FPV<-c()
+  FNV<-c()
+  n<-0
+  for(i in seq(1,folds_num)){
+    n <- as.numeric(results[[i]][1,1]) + n
+    TPV <- c(TPV,as.numeric(results[[i]][2,2]))
+    TNV <- c(TNV,as.numeric(results[[i]][3,3]))
+    FPV <- c(FPV,as.numeric(results[[i]][3,2]))
+    FNV <- c(FNV,as.numeric(results[[i]][2,3]))
+  }
+  TP<-round(sum(TPV)/folds_num,2)
+  TN<-round(sum(TNV)/folds_num,2)
+  FP<-round(sum(FPV)/folds_num,2)
+  FN<-round(sum(FNV)/folds_num,2)
+  f1 <-c(n,"Predicted Positive","Predicted Negative"," ",paste("TP std:",as.character(round(sd(TPV),2))))
+  f2 <-c("Actual Positive",TP,FN,sensitivity(TP,FN),paste("FP std:",as.character(round(sd(FPV),2))))
+  f3 <-c("Actual Negative",FP,TN,specificity(FP,TN),paste("TN std:",as.character(round(sd(TNV),2))))
+  f4 <-c(" ",precision(TP,FP),negative_Predictive_Value(FN,TN),accuracy(TP,TN,FP,FN),paste("FN std:",as.character(round(sd(FNV),2))))
+  matrix<-rbind(f1,f2,f3,f4)
+  return(matrix)
+}
+
+
+cross_validation <- function(dataframe,folds_num){
+  
+  train_formula<-formula(inclinacion_peligrosa ~ especie+altura+diametro_tronco+seccion+long+lat)
+  folds <- create_folds(dataframe,folds_num)
+  
+  results <- list()
+  
+  for(i in 1:folds_num){
+    
+    test_data <- folds[[i]]
+    if(i<folds_num){
+      train_data = folds[[i+1]]
+    }else{
+      train_data = folds[[1]]
+    }
+    
+    for(j in 1:folds_num){
+      if(i == j | (i==folds_num & j==1)){
+        next
+      }
+      
+      train_data <- merge(train_data,folds[[j]],all=TRUE)
+    }
+
+    
+  test_data$especie[which(!(test_data$especie %in% unique(train_data$especie)))] <- NA
+    
+    
+  tree_model<-rpart(formula=train_formula, data=train_data)
+  
+  p <- predict(tree_model,test_data,type="class")
+  
+  results[[i]] <- metrics_confusion_Matrix(test_data[[length(test_data)]],p)
+  
+  
+  }
+  result_matrix <- mean_std_confusion_matrix(results,folds_num)
+  
+  return(result_matrix)
+  
+  
+}
+
+arboladoMza <-read.csv("/home/pablo/Repositorios/ia-uncuyo-2022/tp7-ml/data/arbolado-mza-dataset.csv")
+
+trainingSet<- data.frame(arboladoMza)
+trainingSet$inclinacion_peligrosa <- factor(trainingSet$inclinacion_peligrosa)
+
+
+print(cross_validation(trainingSet,5))
+
+
+```

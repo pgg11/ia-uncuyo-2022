@@ -23,6 +23,27 @@ class EntornoQuoridor:
                 return True
         return False
 
+    def es_valla_valida(self, pos_valla, tipo):
+        # Verifica que la posición de la valla horizontal sea válida
+        if tipo == 'horizontal':
+            if pos_valla[0] < (self.size - 1):
+                if pos_valla not in self.vallas_horizontales:
+                    if (pos_valla[0]-1,pos_valla[1]) not in self.vallas_horizontales:
+                        if (pos_valla[0]+1,pos_valla[1]) not in self.vallas_horizontales:
+                            if pos_valla not in self.vallas_verticales:
+                                return True
+        # Verifica que la posición de la valla vertical sea válida
+        if tipo == 'vertical':
+            if pos_valla[1] < (self.size - 1):
+                if pos_valla not in self.vallas_verticales:
+                    if (pos_valla[0],pos_valla[1]-1) not in self.vallas_verticales:
+                        if (pos_valla[0],pos_valla[1]+1) not in self.vallas_verticales:
+                            if pos_valla not in self.vallas_horizontales:
+                                return True
+        return False
+                    
+         
+
     def hay_valla_entre(self, pos_actual, nueva_pos):
         if pos_actual[0] == nueva_pos[0]:  # Movimiento horizontal
             if pos_actual[1] < nueva_pos[1]:  # Movimiento a la derecha
@@ -55,3 +76,34 @@ class EntornoQuoridor:
             self.vallas_horizontales.add(pos)
         elif tipo == 'vertical':
             self.vallas_verticales.add(pos)
+    
+    def paso(self, accion, indice_peon):
+        recompensa = 0
+        tipo_accion, *params = accion
+
+        nueva_pos = None
+
+        if tipo_accion == "mover":
+            direccion = params[0]
+            if direccion == "izquierda":
+                nueva_pos = (self.peones[indice_peon][0], self.peones[indice_peon][1] - 1)
+            elif direccion == "derecha":
+                nueva_pos = (self.peones[indice_peon][0], self.peones[indice_peon][1] + 1)
+            elif direccion == "arriba":
+                nueva_pos = (self.peones[indice_peon][0] - 1, self.peones[indice_peon][1])
+            elif direccion == "abajo":
+                nueva_pos = (self.peones[indice_peon][0] + 1, self.peones[indice_peon][1])
+            if nueva_pos and self.es_movimiento_valido(self.peones[indice_peon], nueva_pos):
+                self.mover_peon(indice_peon, nueva_pos)
+                recompensa = 1
+            else:
+                recompensa = -1
+        elif tipo_accion == "colocar_valla":
+            pos, tipo_valla = params
+            if self.es_valla_valida(pos, tipo_valla):
+                self.colocar_valla(tipo_valla, pos)
+                recompensa = 1
+            else:
+                recompensa = -1
+
+        return self.estado_actual(), recompensa

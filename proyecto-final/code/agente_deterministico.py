@@ -65,15 +65,15 @@ class AgenteDeterministico:
             opciones = []
             if pos_peon_oponente[0] < entorno.size - 1:
                 opciones.append((pos_peon_oponente, 'horizontal'))
-            if pos_peon_oponente[1] < entorno.size - 1:
+            if pos_peon_oponente[1] < entorno.size - 1 and entorno.es_valla_valida(pos_peon_oponente,'vertical'):
                 opciones.append((pos_peon_oponente, 'vertical'))
 
             random.shuffle(opciones)
             for opcion in opciones:
-                if opcion[1] == 'horizontal' and (opcion[0] not in vallas_horizontales):
+                if opcion[1] == 'horizontal' and entorno.es_valla_valida(opcion[0],'horizontal'):
                     self.vallas_restantes -= 1
                     return ("colocar_valla", opcion[0], 'horizontal')
-                elif opcion[1] == 'vertical' and (opcion[0] not in vallas_verticales):
+                elif opcion[1] == 'vertical' and entorno.es_valla_valida(opcion[0],'vertical'):
                     self.vallas_restantes -= 1
                     return ("colocar_valla", opcion[0], 'vertical')
         return None

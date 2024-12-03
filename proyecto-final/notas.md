@@ -95,3 +95,66 @@ La función de valor estima la recompensa acumulada esperada para un estado o un
 
 ### Entorno (Environment)
 El entorno es el sistema con el que interactúa el agente, respondiendo a sus acciones con nuevos estados y recompensas. En Quoridor, el entorno se define por el tablero, las posiciones de los jugadores, las barreras y las reglas del juego. Diseñar este entorno de manera precisa es esencial para que el agente comprenda y actúe de manera efectiva en el juego.
+
+## Quoridor
+
+### Presentación
+* Un tablero de 9x9 casillas.
+* 20 barreras y 2 peones.
+
+### Finalidad del juego
+
+Llegar el primero a la línea opuesta de su 
+salida (fig. 7).
+
+### REGLAS PARA 2 JUGADORES
+* Antes de empezar, a cada jugador se le otorgan 10 barreras.
+* Cada jugador coloca su peón en el centro de su línea de salida (fig. 1).
+* Sortear para saber quien empieza.
+
+### Desarrollo de una partida
+
+    1- Cuando sea su turno, el jugador puede elegir desplazar su peón o colocar una barrera.
+    
+    2- Si ya ha desplazado todas sus barreras, el jugador solamente podrá desplazar su peón.
+
+    3- Movimiento de los peones: Los peones pueden desplazarse de una casilla y solo de una en una, en sentido horizontal o vertical, avanzando o retrocediendo, (fig. 2). Hay que evitar las barreras (fig.3).
+
+    4- Disposición de las barreras: Las barreras se disponen exactamente entre 2 bloques de 2 casillas (fig 4).
+
+    5- Las barreras se utilizarán para que el adversario pueda avanzar menos, no obstante esta prohibido impedirle completamente el acceso hacia su línea de llegada: Siempre hay que dejar un acceso libre (fig 5).
+
+    6- Frente a frente: Cuando los 2 peones se encuentran cara a cara sobre 2 casillas vecinas sin que una barrera los separe, el jugador que le toque jugar puede saltar y colocarse delante del peón del jugador adversario (fig 6,8 ,9).
+
+### Fin de la partida
+El primer jugador que llegue a la novena casilla, enfrente de su línea de salida, gana la partida.
+
+### Adaptación para el proyecto
+
+Si bien el juego permite jugar de hasta 4 jugadores, cada uno con el objetivo de llegar al lado opuesto de donde comienza, sólo se tomará el juego para 2 jugadores.
+
+Como se utilizará tableros de 5x5 además del original de 9x9, la cantidad de barreras en ese caso estará limitada a 3. 
+
+Además, el **fin de la partida no ocurrirá cuando un peón llegue al lado contrario(cada vez que llegue a la meta volverá a la posicón original), sino que se contará con una cantidad limitada de turnos y ganará el jugador que logre la mayor cantidad de puntos**.
+
+#### Sistema de puntaje
+
+    1- Por cada casillero vertical que se avance hacia la meta sumara 2^n puntos, donde n indica la fila desde el punto de partida.
+    2- Cada barrera colocada sumara 10 puntos.
+    3- Los movimientos laterales no sumaran, ni restarán puntos.
+    4- Los movimientos en sentido a la fila de inicio restarán 2^n puntos, de la misma manera que se indica en el punto 1.
+
+### Justificación del uso del tablero de 5x5
+
+#### Simplicidad y Rapidez en Entrenamiento:
+* Menor Complejidad: Un tablero más pequeño tiene un espacio de estados reducido, lo que facilita la exploración completa del espacio de estados y acciones.
+* Rápido Entrenamiento: El agente puede aprender más rápidamente en un entorno más simple, permitiendo iteraciones más rápidas y pruebas de conceptos.
+
+#### Pruebas Iniciales:
+
+* Validación de Conceptos: Usar un tablero más pequeño para probar y validar algoritmos básicos antes de aplicarlos a un entorno más complejo.
+* Depuración y ajustes: Facilita la identificación y corrección de errores en la implementación del algoritmo y la estructura del entorno.
+
+#### Recursos Computacionales:
+
+* Menos demanda de memoria y procesamiento: El entrenamiento en un tablero más pequeño requiere menos memoria y capacidad de procesamiento, lo que es beneficioso si los recursos son limitados.

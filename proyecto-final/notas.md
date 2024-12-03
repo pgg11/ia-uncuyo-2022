@@ -105,11 +105,11 @@ El entorno es el sistema con el que interactúa el agente, respondiendo a sus ac
 ### Finalidad del juego
 
 Llegar el primero a la línea opuesta de su 
-salida (fig. 7).
+salida.
 
 ### REGLAS PARA 2 JUGADORES
 * Antes de empezar, a cada jugador se le otorgan 10 barreras.
-* Cada jugador coloca su peón en el centro de su línea de salida (fig. 1).
+* Cada jugador coloca su peón en el centro de su línea de salida.
 * Sortear para saber quien empieza.
 
 ### Desarrollo de una partida
@@ -118,13 +118,13 @@ salida (fig. 7).
     
     2- Si ya ha desplazado todas sus barreras, el jugador solamente podrá desplazar su peón.
 
-    3- Movimiento de los peones: Los peones pueden desplazarse de una casilla y solo de una en una, en sentido horizontal o vertical, avanzando o retrocediendo, (fig. 2). Hay que evitar las barreras (fig.3).
+    3- Movimiento de los peones: Los peones pueden desplazarse de una casilla y solo de una en una, en sentido horizontal o vertical, avanzando o retrocediendo. Hay que evitar las barreras.
 
-    4- Disposición de las barreras: Las barreras se disponen exactamente entre 2 bloques de 2 casillas (fig 4).
+    4- Disposición de las barreras: Las barreras se disponen exactamente entre 2 bloques de 2 casillas.
 
-    5- Las barreras se utilizarán para que el adversario pueda avanzar menos, no obstante esta prohibido impedirle completamente el acceso hacia su línea de llegada: Siempre hay que dejar un acceso libre (fig 5).
+    5- Las barreras se utilizarán para que el adversario pueda avanzar menos, no obstante esta prohibido impedirle completamente el acceso hacia su línea de llegada: Siempre hay que dejar un acceso libre.
 
-    6- Frente a frente: Cuando los 2 peones se encuentran cara a cara sobre 2 casillas vecinas sin que una barrera los separe, el jugador que le toque jugar puede saltar y colocarse delante del peón del jugador adversario (fig 6,8 ,9).
+    6- Frente a frente: Cuando los 2 peones se encuentran cara a cara sobre 2 casillas vecinas sin que una barrera los separe, el jugador que le toque jugar puede saltar y colocarse delante del peón del jugador adversario.
 
 ### Fin de la partida
 El primer jugador que llegue a la novena casilla, enfrente de su línea de salida, gana la partida.

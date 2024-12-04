@@ -158,3 +158,9 @@ Además, el **fin de la partida no ocurrirá cuando un peón llegue al lado cont
 #### Recursos Computacionales:
 
 * Menos demanda de memoria y procesamiento: El entrenamiento en un tablero más pequeño requiere menos memoria y capacidad de procesamiento, lo que es beneficioso si los recursos son limitados.
+
+## Esquema de Quoridor
+
+En el contexto de este trabajo, el entorno estará representado por un tablero de 9x9 o 5x5 casillas, donde los agentes (jugadores) interactúan tomando decisiones estratégicas basadas en estados y acciones. Los estados encapsulan toda la información relevante del tablero, incluyendo las posiciones de los peones, las barreras colocadas y las barreras restantes de cada agente. Las acciones disponibles para los agentes consisten en mover su peón a una casilla válida (adyacente o realizando saltos según las reglas) o colocar una barrera en una posición permitida.
+
+La interacción entre los agentes se modelará utilizando Q-learning, donde cada agente aprenderá a maximizar su recompensa mediante la actualización de una función Q. Esta función evalúa el beneficio esperado de realizar una acción en un estado dado. Las recompensas estarán diseñadas para incentivar el progreso hacia la fila objetivo del tablero y penalizar movimientos desfavorables o decisiones que no aporten ventajas estratégicas. A través de este esquema, los agentes podrán optimizar sus políticas de acción, adaptándose dinámicamente al comportamiento del oponente y a las restricciones del entorno, aprendiendo a jugar de manera más eficiente con el tiempo.

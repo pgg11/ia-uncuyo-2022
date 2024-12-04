@@ -9,6 +9,51 @@ Además, se introducen algunas modificaciones, como un sistema de puntuación y 
 
 Este informe describe el desarrollo del proyecto en cinco secciones principales: el marco teórico, que aborda los fundamentos conceptuales del aprendizaje por refuerzo y su aplicación en Quoridor; el diseño experimental, donde se detalla la implementación del agente y las métricas de evaluación; el análisis y discusión de resultados, que interpreta los hallazgos obtenidos durante las pruebas; y las conclusiones, que sintetizan los aprendizajes y plantean posibles líneas futuras de trabajo.
 
+## Marco Teórico
+
+El desarrollo de agentes inteligentes para juegos estratégicos ha sido un tema central en el campo de la inteligencia artificial. Este trabajo se centra en el uso del aprendizaje por refuerzo (Reinforcement Learning, RL), una rama de aprendizaje automático en la que un agente interactúa con un entorno para maximizar una recompensa acumulada. En este contexto, el juego Quoridor se utiliza como caso de estudio, siendo un entorno ideal para investigar la toma de decisiones secuenciales, la planificación estratégica y la interacción competitiva.
+
+#### Aprendizaje por Refuerzo
+El aprendizaje por refuerzo se basa en la interacción entre un agente y un entorno. El agente observa el estado del entorno, ejecuta una acción, recibe una recompensa y transita hacia un nuevo estado. El objetivo del agente es aprender una política que maximice la recompensa acumulada a lo largo del tiempo. La política puede ser una función determinista o probabilística que asocia estados con acciones.
+
+Un concepto central en RL es la función de valor, que estima la recompensa esperada para un estado o una combinación estado-acción. En este trabajo, se utiliza el algoritmo Q-learning, que aproxima la función de valor óptima (𝑄*) sin requerir un modelo explícito del entorno. Este algoritmo utiliza una estructura conocida como Q-table para almacenar los valores Q y actualizarlos mediante la fórmula:
+
+    𝑄(𝑠,𝑎) ← 𝑄(𝑠,𝑎) + 𝛼 [𝑟 + 𝛾max~𝑎′~ 𝑄(𝑠′,𝑎′) − 𝑄(𝑠,𝑎)]
+
+Donde:
+
+* 𝑠 y 𝑠′ son el estado actual y el siguiente.
+
+* 𝑎 y 𝑎′ son las acciones actuales y futuras.
+
+* 𝑟 es la recompensa recibida.
+
+* 𝛼 es la tasa de aprendizaje.
+
+* 𝛾 es el factor de descuento.
+
+#### Aplicación en Quoridor
+
+En el juego de Quoridor, el entorno está representado por un tablero de 9x9 o 5x5 casillas. Los estados encapsulan información sobre las posiciones de los peones, las barreras colocadas y las barreras restantes de cada jugador. Las acciones disponibles incluyen mover el peón a una casilla válida (horizontal, vertical o mediante saltos) y colocar barreras en ubicaciones permitidas. El objetivo del agente es llegar a la fila opuesta o maximizar su puntaje siguiendo el esquema adaptado.
+
+La recompensa se diseña para reflejar el progreso estratégico:
+
+    1- Movimientos hacia la meta: Otorgan recompensas crecientes (2^𝑛^, según la fila alcanzada).
+
+    2- Movimientos en sentido opuesto: Se penalizan con 2^𝑛^, siguiendo el mismo criterio.
+
+    3- Colocación de barreras: Reciben una recompensa fija positiva para incentivar el uso estratégico de este recurso.
+
+Este diseño recompensa las acciones que acercan al agente a su objetivo, penaliza movimientos regresivos y fomenta el uso eficiente de las barreras.
+
+#### Comparación con Otros Métodos
+
+Aunque este trabajo emplea Q-learning, otros enfoques, como el **Monte Carlo Tree Search (MCTS)**, han sido explorados previamente en Quoridor debido a su capacidad para evaluar de forma eficiente múltiples secuencias de movimientos. Sin embargo, el MCTS es computacionalmente intensivo y requiere un modelo explícito del juego, lo que lo hace menos adecuado para entrenar agentes adaptativos en un entorno dinámico. En contraste, Q-learning permite a los agentes aprender directamente de la interacción con el entorno, adaptándose al comportamiento del oponente y a reglas modificadas.
+
+#### Relevancia del Aprendizaje por Refuerzo en Quoridor
+
+La naturaleza secuencial y competitiva de Quoridor lo convierte en un entorno ideal para investigar el balance entre exploración y explotación, el diseño de recompensas, y la representación eficiente de estados y acciones. Además, las adaptaciones introducidas en este proyecto, como el sistema de puntuación y los tableros de diferentes tamaños, permiten evaluar cómo la complejidad del entorno afecta el aprendizaje y la estrategia del agente.
+
 ## Bibliografía
 
 [1] Russell, S., & Norvig, P. (2010). Artificial Intelligence: A Modern Approach (3rd ed.). Pearson.

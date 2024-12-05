@@ -95,3 +95,107 @@ La función de valor estima la recompensa acumulada esperada para un estado o un
 
 ### Entorno (Environment)
 El entorno es el sistema con el que interactúa el agente, respondiendo a sus acciones con nuevos estados y recompensas. En Quoridor, el entorno se define por el tablero, las posiciones de los jugadores, las barreras y las reglas del juego. Diseñar este entorno de manera precisa es esencial para que el agente comprenda y actúe de manera efectiva en el juego.
+
+## Quoridor
+
+### Presentación
+* Un tablero de 9x9 casillas.
+* 20 barreras y 2 peones.
+
+### Finalidad del juego
+
+Llegar el primero a la línea opuesta de su 
+salida.
+
+### REGLAS PARA 2 JUGADORES
+* Antes de empezar, a cada jugador se le otorgan 10 barreras.
+* Cada jugador coloca su peón en el centro de su línea de salida.
+* Sortear para saber quien empieza.
+
+### Desarrollo de una partida
+
+    1- Cuando sea su turno, el jugador puede elegir desplazar su peón o colocar una barrera.
+    
+    2- Si ya ha desplazado todas sus barreras, el jugador solamente podrá desplazar su peón.
+
+    3- Movimiento de los peones: Los peones pueden desplazarse de una casilla y solo de una en una, en sentido horizontal o vertical, avanzando o retrocediendo. Hay que evitar las barreras.
+
+    4- Disposición de las barreras: Las barreras se disponen exactamente entre 2 bloques de 2 casillas.
+
+    5- Las barreras se utilizarán para que el adversario pueda avanzar menos, no obstante esta prohibido impedirle completamente el acceso hacia su línea de llegada: Siempre hay que dejar un acceso libre.
+
+    6- Frente a frente: Cuando los 2 peones se encuentran cara a cara sobre 2 casillas vecinas sin que una barrera los separe, el jugador que le toque jugar puede saltar y colocarse delante del peón del jugador adversario.
+
+### Fin de la partida
+El primer jugador que llegue a la novena casilla, enfrente de su línea de salida, gana la partida.
+
+### Adaptación para el proyecto
+
+Si bien el juego permite jugar de hasta 4 jugadores, cada uno con el objetivo de llegar al lado opuesto de donde comienza, sólo se tomará el juego para 2 jugadores.
+
+Como se utilizará tableros de 5x5 además del original de 9x9, la cantidad de barreras en ese caso estará limitada a 3. 
+
+Además, el **fin de la partida no ocurrirá cuando un peón llegue al lado contrario(cada vez que llegue a la meta volverá a la posicón original), sino que se contará con una cantidad limitada de turnos y ganará el jugador que logre la mayor cantidad de puntos**.
+
+#### Sistema de puntaje
+
+    1- Por cada casillero vertical que se avance hacia la meta sumara 2^n puntos, donde n indica la fila desde el punto de partida.
+    2- Cada barrera colocada sumara 10 puntos.
+    3- Los movimientos laterales no sumaran, ni restarán puntos.
+    4- Los movimientos en sentido a la fila de inicio restarán 2^n puntos, de la misma manera que se indica en el punto 1.
+
+### Justificación del uso del tablero de 5x5
+
+#### Simplicidad y Rapidez en Entrenamiento:
+* Menor Complejidad: Un tablero más pequeño tiene un espacio de estados reducido, lo que facilita la exploración completa del espacio de estados y acciones.
+* Rápido Entrenamiento: El agente puede aprender más rápidamente en un entorno más simple, permitiendo iteraciones más rápidas y pruebas de conceptos.
+
+#### Pruebas Iniciales:
+
+* Validación de Conceptos: Usar un tablero más pequeño para probar y validar algoritmos básicos antes de aplicarlos a un entorno más complejo.
+* Depuración y ajustes: Facilita la identificación y corrección de errores en la implementación del algoritmo y la estructura del entorno.
+
+#### Recursos Computacionales:
+
+* Menos demanda de memoria y procesamiento: El entrenamiento en un tablero más pequeño requiere menos memoria y capacidad de procesamiento, lo que es beneficioso si los recursos son limitados.
+
+## Esquema de Quoridor
+
+En el contexto de este trabajo, el entorno estará representado por un tablero de 9x9 o 5x5 casillas, donde los agentes (jugadores) interactúan tomando decisiones estratégicas basadas en estados y acciones. Los estados encapsulan toda la información relevante del tablero, incluyendo las posiciones de los peones, las barreras colocadas y las barreras restantes de cada agente. Las acciones disponibles para los agentes consisten en mover su peón a una casilla válida (adyacente o realizando saltos según las reglas) o colocar una barrera en una posición permitida.
+
+La interacción entre los agentes se modelará utilizando Q-learning, donde cada agente aprenderá a maximizar su recompensa mediante la actualización de una función Q. Esta función evalúa el beneficio esperado de realizar una acción en un estado dado. Las recompensas estarán diseñadas para incentivar el progreso hacia la fila objetivo del tablero y penalizar movimientos desfavorables o decisiones que no aporten ventajas estratégicas. A través de este esquema, los agentes podrán optimizar sus políticas de acción, adaptándose dinámicamente al comportamiento del oponente y a las restricciones del entorno, aprendiendo a jugar de manera más eficiente con el tiempo.
+
+## Agente Determinista
+
+El agente determinista sigue un conjunto de reglas fijas para tomar decisiones durante el juego. Su comportamiento se estructura de la siguiente manera:
+
+**1- Avance hacia la meta**: Si puede moverse verticalmente en dirección a su objetivo sin obstáculos, esta será su acción prioritaria.
+
+**2- Colocación estratégica de paredes**: Si no es posible avanzar debido a un obstáculo, el agente intentará bloquear el progreso del oponente. Para esto, colocará paredes en tres turnos consecutivos, formando una trampa en forma de "U", siempre que la distancia del oponente a su meta lo permita y tenga suficientes paredes disponibles.
+
+**3- Movimiento lateral**: Si no puede avanzar ni colocar una trampa, buscará moverse lateralmente, eligiendo aleatoriamente entre las opciones disponibles.
+
+**4- Retroceso estratégico**: Si tampoco es posible moverse lateralmente, retrocederá en el tablero hasta encontrar una posición desde la cual pueda realizar un movimiento lateral.
+
+## Implementación de los agentes
+
+#### Agente determinista
+
+* Implementar una función para evaluar el estado actual del tablero y decidir la acción a tomar, siguiendo estrictamente las reglas mencionadas.
+
+* Crear funciones auxiliares que permitan al agente identificar si puede avanzar, si debe colocar paredes estratégicamente y cómo calcular la configuración de la trampa en "U". Estas funciones también verificarán si hay paredes suficientes para ejecutar la estrategia.
+
+* Diseñar un sistema para gestionar los movimientos laterales o de retroceso en caso de no poder avanzar o bloquear al oponente.
+
+#### Agente basado en Q-learning:
+
+* Definir una representación eficiente del estado del tablero que incluya las posiciones de los peones y las barreras colocadas.
+
+* Establecer las acciones disponibles y un sistema de recompensas alineado con el objetivo de alcanzar la meta y las penalizaciones por movimientos poco estratégicos.
+
+* Entrenar al agente utilizando simulaciones para ajustar la función Q y permitirle aprender una política óptima para maximizar la probabilidad de victoria.
+
+* Implementar un sistema para explorar nuevas acciones y explotar los valores aprendidos durante las partidas.
+
+
+Ambos agentes serán integrados en el mismo entorno para permitir partidas automáticas entre ellos, comparando el rendimiento y analizando las diferencias entre el comportamiento fijo del agente determinista y el adaptativo del agente basado en Q-learning.

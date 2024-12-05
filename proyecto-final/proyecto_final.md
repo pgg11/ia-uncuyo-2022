@@ -1,17 +1,19 @@
 ## Introducción
-El juego Quoridor se presenta como un desafío estratégico de gran interés en el campo de los juegos de tablero, combinando la planificación a largo plazo con la adaptación a las acciones del oponente. Este proyecto tiene como objetivo desarrollar un agente inteligente capaz de competir de manera eficaz en este entorno, empleando técnicas de aprendizaje por refuerzo.
+El desarrollo de agentes inteligentes para juegos estratégicos ha sido un tema central en el campo de la inteligencia artificial. Este trabajo se centra en el uso del aprendizaje por refuerzo (Reinforcement Learning, RL), una rama de aprendizaje automático en la que un agente interactúa con un entorno para maximizar una recompensa acumulada.
 
-El aprendizaje por refuerzo ha demostrado ser una herramienta poderosa para diseñar sistemas autónomos que interactúan con entornos complejos, aprendiendo estrategias óptimas mediante prueba y error. Su implementación en Quoridor permite explorar cómo un agente puede aprender a navegar un espacio de estados dinámico, utilizando representaciones eficientes del tablero, estrategias de movimiento y colocación de barreras.
+Quoridor se presenta como un desafío estratégico de gran interés en el ámbito de los juegos de tablero, al combinar la planificación a largo plazo con la adaptación a las acciones del oponente. En este proyecto, el aprendizaje por refuerzo se utiliza para explorar cómo un agente puede aprender a navegar un espacio de estados dinámico, empleando representaciones eficientes del tablero, estrategias de movimiento y colocación de barreras.
 
-Dado que el diseño y entrenamiento de agentes inteligentes en juegos como Quoridor plantean desafíos significativos, este proyecto se centra en investigar el desempeño del algoritmo Q-learning, un enfoque clásico de aprendizaje por refuerzo. El agente será evaluado en tableros de diferentes tamaños (5x5 y 9x9), adaptando las reglas y objetivos del juego para maximizar la eficiencia del entrenamiento y analizar su impacto en la estrategia del agente.
+Este trabajo se centra en el diseño, implementación y análisis de dos tipos de agentes para el juego Quoridor: un agente determinista, basado en reglas predefinidas, y un agente adaptativo, entrenado mediante Q-learning, un algoritmo de aprendizaje por refuerzo.
 
-Además, se introducen algunas modificaciones, como un sistema de puntuación y un límite de turnos, para explorar variantes del juego que ofrezcan un balance entre simplicidad y complejidad estratégica.
+Para evaluar de manera efectiva al agente basado en Q-learning, se introdujeron algunas modificaciones al juego original. Entre ellas, un sistema de puntuación y un límite de turnos, que permiten medir el desempeño en escenarios más controlados y facilitan el entrenamiento del agente.
 
-Este informe describe el desarrollo del proyecto en cinco secciones principales: el marco teórico, que aborda los fundamentos conceptuales del aprendizaje por refuerzo y su aplicación en Quoridor; el diseño experimental, donde se detalla la implementación del agente y las métricas de evaluación; el análisis y discusión de resultados, que interpreta los hallazgos obtenidos durante las pruebas; y las conclusiones, que sintetizan los aprendizajes y plantean posibles líneas futuras de trabajo.
+El agente adaptativo será evaluado en partidas automáticas contra un agente determinista, cuyo comportamiento está basado en un conjunto fijo de reglas, como avanzar prioritariamente hacia la meta y bloquear estratégicamente al oponente mediante la colocación de barreras. Esta comparación permitirá analizar las diferencias en desempeño entre un enfoque basado en aprendizaje por refuerzo y otro basado en reglas fijas, destacando las ventajas de un agente que aprende y se adapta dinámicamente.
 
-## Marco Teórico
+Este informe describe el desarrollo del proyecto en cinco secciones principales: el marco teórico, que aborda los fundamentos conceptuales del aprendizaje por refuerzo y su aplicación en Quoridor; el diseño experimental, donde se detalla la implementación de los agentes y las métricas de evaluación; el análisis y discusión de resultados, que interpreta los hallazgos obtenidos durante las pruebas; y las conclusiones, que sintetizan los aprendizajes y plantean posibles líneas futuras de trabajo.
 
-El desarrollo de agentes inteligentes para juegos estratégicos ha sido un tema central en el campo de la inteligencia artificial. Este trabajo se centra en el uso del aprendizaje por refuerzo (Reinforcement Learning, RL), una rama de aprendizaje automático en la que un agente interactúa con un entorno para maximizar una recompensa acumulada. En este contexto, el juego Quoridor se utiliza como caso de estudio, siendo un entorno ideal para investigar la toma de decisiones secuenciales, la planificación estratégica y la interacción competitiva.
+## Marco Teórico 
+
+Quoridor es un juego de tablero que plantea desafíos estratégicos y tácticos. Los jugadores deben avanzar hacia su objetivo mientras colocan barreras para dificultar el progreso del oponente, garantizando siempre un camino accesible hacia la meta. Esta combinación de planificación ofensiva y defensiva convierte a Quoridor en un entorno ideal para estudiar agentes inteligentes que toman decisiones en tiempo real.
 
 #### Aprendizaje por Refuerzo
 El aprendizaje por refuerzo se basa en la interacción entre un agente y un entorno. El agente observa el estado del entorno, ejecuta una acción, recibe una recompensa y transita hacia un nuevo estado. El objetivo del agente es aprender una política que maximice la recompensa acumulada a lo largo del tiempo. La política puede ser una función determinista o probabilística que asocia estados con acciones.
@@ -34,7 +36,11 @@ Donde:
 
 #### Aplicación en Quoridor
 
-En el juego de Quoridor, el entorno está representado por un tablero de 9x9 o 5x5 casillas. Los estados encapsulan información sobre las posiciones de los peones, las barreras colocadas y las barreras restantes de cada jugador. Las acciones disponibles incluyen mover el peón a una casilla válida (horizontal, vertical o mediante saltos) y colocar barreras en ubicaciones permitidas. El objetivo del agente es llegar a la fila opuesta o maximizar su puntaje siguiendo el esquema adaptado.
+En el juego de Quoridor, el entorno está representado por un tablero de 9x9 casillas. En este proyecto, se trabajan dos variantes del juego: un tablero estándar de 9x9 casillas y una versión simplificada de 5x5. El uso de un tablero más pequeño facilita la exploración y entrenamiento inicial del agente basado en Q-learning, permitiendo un análisis comparativo del impacto de la complejidad del entorno en el desempeño de los agentes.
+
+Además, se introducen modificaciones como un sistema de puntuación basado en el progreso hacia la meta, la colocación de barreras y la cantidad de turnos disponibles. Estas reglas adaptadas permiten evaluar de forma más granular las estrategias y decisiones tomadas por los agentes.
+
+En este contexto los estados encapsulan información sobre las posiciones de los peones, las barreras colocadas y las barreras restantes de cada jugador. Las acciones disponibles incluyen mover el peón a una casilla válida (horizontal, vertical o mediante saltos) y colocar barreras en ubicaciones permitidas. El objetivo del agente es llegar a la fila opuesta o maximizar su puntaje siguiendo el esquema adaptado.
 
 La recompensa se diseña para reflejar el progreso estratégico:
 
@@ -45,6 +51,14 @@ La recompensa se diseña para reflejar el progreso estratégico:
     3- Colocación de barreras: Reciben una recompensa fija positiva para incentivar el uso estratégico de este recurso.
 
 Este diseño recompensa las acciones que acercan al agente a su objetivo, penaliza movimientos regresivos y fomenta el uso eficiente de las barreras.
+
+#### El Agente Determinista
+
+En contraste con el agente basado en Q-learning, el agente determinista sigue un conjunto de reglas predefinidas para tomar decisiones. Estas reglas incluyen avanzar hacia la meta siempre que sea posible, bloquear estratégicamente al oponente mediante la colocación de barreras en forma de "U", y realizar movimientos laterales o retrocesos cuando las opciones anteriores no estén disponibles. Este enfoque ofrece un comportamiento predecible y sirve como referencia para evaluar el desempeño del agente adaptativo.
+
+#### Comparación de Enfoques
+
+El enfrentamiento entre el agente determinista y el agente basado en Q-learning proporciona una base para analizar la eficacia de los enfoques basados en reglas frente a los adaptativos. Mientras que el agente determinista sigue estrategias fijas, el agente de Q-learning tiene la capacidad de ajustar su comportamiento a medida que aprende del entorno, lo que puede resultar en un desempeño superior en situaciones complejas o dinámicas.
 
 #### Comparación con Otros Métodos
 

@@ -164,3 +164,38 @@ Además, el **fin de la partida no ocurrirá cuando un peón llegue al lado cont
 En el contexto de este trabajo, el entorno estará representado por un tablero de 9x9 o 5x5 casillas, donde los agentes (jugadores) interactúan tomando decisiones estratégicas basadas en estados y acciones. Los estados encapsulan toda la información relevante del tablero, incluyendo las posiciones de los peones, las barreras colocadas y las barreras restantes de cada agente. Las acciones disponibles para los agentes consisten en mover su peón a una casilla válida (adyacente o realizando saltos según las reglas) o colocar una barrera en una posición permitida.
 
 La interacción entre los agentes se modelará utilizando Q-learning, donde cada agente aprenderá a maximizar su recompensa mediante la actualización de una función Q. Esta función evalúa el beneficio esperado de realizar una acción en un estado dado. Las recompensas estarán diseñadas para incentivar el progreso hacia la fila objetivo del tablero y penalizar movimientos desfavorables o decisiones que no aporten ventajas estratégicas. A través de este esquema, los agentes podrán optimizar sus políticas de acción, adaptándose dinámicamente al comportamiento del oponente y a las restricciones del entorno, aprendiendo a jugar de manera más eficiente con el tiempo.
+
+## Agente Determinista
+
+El agente determinista sigue un conjunto de reglas fijas para tomar decisiones durante el juego. Su comportamiento se estructura de la siguiente manera:
+
+**1- Avance hacia la meta**: Si puede moverse verticalmente en dirección a su objetivo sin obstáculos, esta será su acción prioritaria.
+
+**2- Colocación estratégica de paredes**: Si no es posible avanzar debido a un obstáculo, el agente intentará bloquear el progreso del oponente. Para esto, colocará paredes en tres turnos consecutivos, formando una trampa en forma de "U", siempre que la distancia del oponente a su meta lo permita y tenga suficientes paredes disponibles.
+
+**3- Movimiento lateral**: Si no puede avanzar ni colocar una trampa, buscará moverse lateralmente, eligiendo aleatoriamente entre las opciones disponibles.
+
+**4- Retroceso estratégico**: Si tampoco es posible moverse lateralmente, retrocederá en el tablero hasta encontrar una posición desde la cual pueda realizar un movimiento lateral.
+
+## Implementación de los agentes
+
+#### Agente determinista
+
+* Implementar una función para evaluar el estado actual del tablero y decidir la acción a tomar, siguiendo estrictamente las reglas mencionadas.
+
+* Crear funciones auxiliares que permitan al agente identificar si puede avanzar, si debe colocar paredes estratégicamente y cómo calcular la configuración de la trampa en "U". Estas funciones también verificarán si hay paredes suficientes para ejecutar la estrategia.
+
+* Diseñar un sistema para gestionar los movimientos laterales o de retroceso en caso de no poder avanzar o bloquear al oponente.
+
+#### Agente basado en Q-learning:
+
+* Definir una representación eficiente del estado del tablero que incluya las posiciones de los peones y las barreras colocadas.
+
+* Establecer las acciones disponibles y un sistema de recompensas alineado con el objetivo de alcanzar la meta y las penalizaciones por movimientos poco estratégicos.
+
+* Entrenar al agente utilizando simulaciones para ajustar la función Q y permitirle aprender una política óptima para maximizar la probabilidad de victoria.
+
+* Implementar un sistema para explorar nuevas acciones y explotar los valores aprendidos durante las partidas.
+
+
+Ambos agentes serán integrados en el mismo entorno para permitir partidas automáticas entre ellos, comparando el rendimiento y analizando las diferencias entre el comportamiento fijo del agente determinista y el adaptativo del agente basado en Q-learning.

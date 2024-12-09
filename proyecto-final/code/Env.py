@@ -148,7 +148,9 @@ class Env:
                 actions.append(move)
 
         return actions
-
+    
+    def get_barriers(self):
+        return self.barriers
 
 
 

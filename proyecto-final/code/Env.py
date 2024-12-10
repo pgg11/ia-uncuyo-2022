@@ -1,16 +1,37 @@
 import numpy as np
+from DeterministicAgent import DeterministicAgent
 
 class Env:
     def __init__(self, size=9, barriers_per_player=10):
         self.size = size
         self.board = np.zeros((size, size), dtype=int)  # 0: casilla libre, 1: jugador 1, 2: jugador 2
-        self.barriers = set({('V', 0, 0), ('V', 2, 3), ('H', 1, 1), ('H', 4, 0), ('V', 0, 1), ('V', 1, 2)})  # conjunto donde se guarda la posicion de las barreras. ej: ("H", x, y)
+        self.barriers = set({("H", 3, 3)})  # conjunto donde se guarda la posicion de las barreras. ej: ("H", x, y) {('V', 0, 0), ('V', 2, 3), ('H', 1, 1), ('H', 4, 0), ('V', 0, 1), ('V', 1, 2)}
         self.players = {
-            1: {"position": (0,2), "barriers_left": barriers_per_player}, # posicion original 0,size // 2
-            2: {"position": (1,2), "barriers_left": barriers_per_player} #posicion original size-1,size // 2
+            1: {"position": (0,size // 2), "barriers_left": barriers_per_player},
+            2: {"position": (size-1,size // 2), "barriers_left": barriers_per_player}
         }
         self.turn = 0
-        self.max_turns = 100  # limite de turnos
+        self.max_turns = 30  # limite de turnos
+    
+    def get_barriers(self):
+        return self.barriers
+    
+    def get_size(self):
+        return self.size
+
+    def get_player_position(self, player):
+        return self.players[player]["position"]
+    
+    def set_player_position(self, player, position):
+        x, y = self.players[player]["position"]
+        self.board[x][y] = 0
+        self.players[player]["position"] = position
+        if player == 1:
+            if position[0] >= 8:
+                self.players[player]["position"] = (0 , self.size // 2)
+        else:
+            if position[0] <= 0:
+                self.players[player]["position"] = (self.size-1 , self.size // 2)
 
     def display_board(self):
 
@@ -149,15 +170,72 @@ class Env:
 
         return actions
     
-    def get_barriers(self):
-        return self.barriers
+    def player_move(self,player,action):
+
+        player_pos = self.get_player_position(player)
+
+        if action[0] == "move":
+            move = action[1]
+            self.set_player_position(player,self.calculate_new_position(player_pos, action))
+        
+        elif action[0] == "place_barrier":
+            barrier = action[1]
+            self.barriers.add(barrier)
+            self.players[player]["barriers_left"] -= 1
+    
+    def calculate_new_position(self, pos, action):
+        
+        moves = {
+            "up": [-1,0],
+            "jump up": [-2,0],
+            "jump up left": [-1,-1],
+            "jump up right": [-1,1],
+            "right": [0,1],
+            "jump right": [0, 2],
+            "jump right up": [-1,1],
+            "jump right down": [1,1],
+            "left": [0,-1],
+            "jump left": [0,-2],
+            "jump left up": [-1,-1],
+            "jump left down": [1,-1],            
+            "down": [1,0],
+            "jump down": [2,0],
+            "jump down left": [1,-1],
+            "jump down right": [1,1]
+        }
+
+        new_pos = (pos[0]+ moves[action[1]][0], pos[1]+ moves[action[1]][1])
+
+        return new_pos
+
+
 
 
 
 def test():
     env = Env(9,10)
-    env.display_board()
-    print(env.get_actions(1))
+    agent1 = DeterministicAgent(1)
+    agent2 = DeterministicAgent(2)
+
+    while env.turn < env.max_turns:
+
+        print(f"Turno: {env.turn}")
+        env.display_board()
+        if env.turn % 2 == 0:
+            action = agent1.choose_action(env)
+            print("Player 1: ",end="")
+            print(action)
+            env.player_move(1, action)
+        else:
+            action = agent2.choose_action(env)
+            print("Player 2: ",end="")
+            print(action)
+            env.player_move(2, action)
+
+        env.turn += 1
+        print("-----------------------------------------------------------")
+
+
 
 if __name__ == "__main__":
     test()

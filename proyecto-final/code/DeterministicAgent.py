@@ -20,18 +20,18 @@ class DeterministicAgent:
 
         # 1. Avance hacia la meta
         actions = env.get_actions(self.player_id)
-        print(f"player 1: {actions}")
+        #print(f"player 1: {actions}")
         
         if self.player_id == 1:
-            if "down" in actions:
+            if ("move","down") in actions:
                 return ("move","down")
-            elif "jump down" in actions:
+            elif ("move","jump down") in actions:
                 return ("move","jump down")
 
         elif self.player_id == 2:
-            if "up" in actions:
+            if ("move","up") in actions:
                 return ("move","up")
-            elif "jump up" in actions:
+            elif ("move","jump up") in actions:
                 return ("move","jump up")
 
         # 2. Colocación de paredes
@@ -65,15 +65,21 @@ class DeterministicAgent:
                         return ("place_barrier", ("V", opponent_pos[0]-1, opponent_pos[1]))
 
         # 3. Movimiento lateral
-        lateral_moves = [move for move in ["left", "right", "jump left", "jump right"] if move in actions]
+        lateral_moves = [move for move in [("move","left"),("move", "right"), ("move","jump left"), ("move","jump right")] if move in actions]
         if lateral_moves:
-            return ("move",random.choice(lateral_moves))
+            return (random.choice(lateral_moves))
 
         # 4. Retroceso
-        if self.player_id == 1 and ("up" in actions or "jump up" in actions):
-            return ("move","up")
-        elif self.player_id == 2 and ("down" in actions or "jump down" in actions):
-            return ("move","down")
+        if self.player_id == 1:
+            if ("move","up") in actions:
+                return ("move","up")
+            elif ("move","jump up") in actions:
+                return ("move","jump up")
+        elif self.player_id == 2:
+            if ("move","down") in actions:
+                return ("move","down")
+            elif ("move","jump down") in actions:
+                return ("move","jump down")
             
     # def is_col_blocked(self, pos, barriers, size):
     #     player_id = self.get_player_id()

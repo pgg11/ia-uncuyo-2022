@@ -189,10 +189,13 @@ class Env:
 
         for move in possible_moves:
             if self.is_valid_step(player, move):
-                actions.append(move)
+                actions.append(("move",move))
         
+        available_barriers = self.get_available_barriers()
+
         if self.players[player]["barriers_left"] > 0:
-            actions.append("place_barrier")
+            for barrier in available_barriers:
+                actions.append(("place_barrier", barrier))
 
         return actions
     
@@ -285,7 +288,7 @@ class Env:
             self.set_player_position(player,self.calculate_new_position(player_pos, action))
 
             row_position = self.get_player_position(player)[0]
-            goal_row = 0 if player == 2 else 8
+            goal_row = 0 if player == 2 else self.size-1
             factor = -1 if player == 1 else 1
             if move in ["up", "jump up", "jump up left", "jump up right"]:
                 self.players[player]["score"] += factor * 2 ** (self.size - abs(goal_row - row_position))

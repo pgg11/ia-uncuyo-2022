@@ -4,12 +4,11 @@ from RLAgent import RLAgent, train_agent
 
 # Prueba inicial de los agentes y el entorno
 def test():
-    env = Env(9,10)
+    env = Env(5,3)
     agent1 = DeterministicAgent(1)
-    agent2 = RLAgent(2)
+    agent2 = RLAgent(2,0.1,0.995,0.2)
 
     train_agent(env,agent2,agent1)
-    agent2.decay_epsilon(0)
 
     env.reset()
 
@@ -26,6 +25,7 @@ def test():
         else:
             action = agent2.choose_action(env)
             print("Player 2: ",end="")
+            print(f"Score: {env.players[2]['score']}", end="")
             print(action)
             env.player_move(2, action)
 

@@ -2,7 +2,7 @@ import numpy as np
 import random
 
 class RLAgent:
-    def __init__(self, player_id, alpha=0.1, gamma=0.95, epsilon=0.3):
+    def __init__(self, player_id, alpha=0.1, gamma=0.95, epsilon=0.05):
         self.player_id = player_id
         self.alpha = alpha      # Tasa de aprendizaje
         self.gamma = gamma      # Factor de descuento
@@ -28,35 +28,30 @@ class RLAgent:
         actions = env.get_actions(self.get_player_id())
         available_barriers = env.get_available_barriers()
         state = env.get_state()
-        print(actions)
-        env.display_board()
+        # print(actions)
+        #env.display_board()
         if random.random() < self.epsilon:  # Exploración
             selected_action = random.choice(actions)
-            if selected_action == 'place_barrier':
-                return (selected_action, random.choice(available_barriers))
-            else:
-                return ("move", selected_action)
+            return selected_action
         else:  # Explotación
             q_values = {action: self.get_q_value(state, action) for action in actions}
             max_q = max(q_values.values())
             best_actions = [action for action, q in q_values.items() if q == max_q]
             selected_action = random.choice(best_actions)
-            if selected_action == 'place_barrier':
-                return (selected_action, random.choice(available_barriers))
-            else:
-                return ("move",selected_action)
+            return selected_action
 
     def decay_epsilon(self, decay_rate):
         #Reduce el valor de epsilon para explorar menos con el tiempo
         self.epsilon *= decay_rate
 
 
-def train_agent(env, rl_agent, opponent_agent, episodes=500, max_turns=64):
+def train_agent(env, rl_agent, opponent_agent, episodes=1000, max_turns=64):
     for episode in range(episodes):
         env.reset()  # Reinicia el entorno para un nuevo episodio
+        print(f"Episodio: {episode}")
         for turn in range(max_turns):
             state = env.get_state()  # Estado actual
-
+            env.display_board()
             if turn % 2 == 0:
                 action = opponent_agent.choose_action(env)
                 #print("Player 1: ",end="")
@@ -81,8 +76,13 @@ def train_agent(env, rl_agent, opponent_agent, episodes=500, max_turns=64):
                         reward = -(2 ** (env.size - abs(goal_row - row_position)))
 
                 elif action[0] == "place_barrier" and env.players[rl_agent.get_player_id()]["barriers_left"] > 0:
-
-                    reward = 5  # Recompensa por colocar una barrera
+                    opponent_id = opponent_agent.get_player_id()
+                    opponent_position = env.players[opponent_id]["position"]
+                    orientation, x, y = action[1]
+                    if orientation == "H" and y == opponent_position[1]:
+                        reward = 30 # Recompensa por bloquear oponente con barrera
+                    else:
+                        reward = 2  # Recompensa por colocar una barrera
 
                 next_state = env.get_state()
                 rl_agent.update_q_value(actions, state, action, reward, next_state)

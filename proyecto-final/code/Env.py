@@ -115,12 +115,12 @@ class Env:
                     return True
         elif move == "jump down right" and (x < self.size - 1 and y < self.size - 1) and self.is_opponent_adjacent(self.players[player],self.players[opponent],"down"):
             if ("H", x, y) not in self.barriers and ("H", x, y - 1) not in self.barriers:
-                if ("H", x+1, y) in self.barriers or ("H", x+1, y-1) in self.barriers:
+                if ("H", x+1, y) in self.barriers or ("H", x+1, y-1) in self.barriers or (y+1 == self.size-1):
                     if ("V", x, y) not in self.barriers and ("V", x+1, y) not in self.barriers:
                         return True
         elif move == "jump down left" and (x < self.size - 1 and y > 0) and self.is_opponent_adjacent(self.players[player],self.players[opponent],"down"):
             if ("H", x, y) not in self.barriers and ("H", x, y - 1) not in self.barriers:
-                if ("H", x+1, y) in self.barriers or ("H", x+1, y-1) in self.barriers:
+                if ("H", x+1, y) in self.barriers or ("H", x+1, y-1) in self.barriers or (y-1 == 0):
                     if ("V", x, y-1) not in self.barriers and ("V", x+1, y-1) not in self.barriers:
                         return True
         elif move == "jump up" and x > 0 and self.is_opponent_adjacent(self.players[player],self.players[opponent],"up"):
@@ -129,12 +129,12 @@ class Env:
                     return True
         elif move == "jump up right" and (x > 0 and y < self.size-1) and self.is_opponent_adjacent(self.players[player],self.players[opponent],"up"):
             if ("H", x - 1, y) not in self.barriers and ("H", x - 1 , y + 1) not in self.barriers:
-                if ("H", x-2, y) in self.barriers or ("H", x-2, y-1) in self.barriers:
+                if ("H", x-2, y) in self.barriers or ("H", x-2, y-1) in self.barriers or (y+1 == self.size-1):
                     if ("V", x-1, y) not in self.barriers and ("V", x-2, y) not in self.barriers:
                         return True
         elif move == "jump up left" and (x > 0 and y > 0) and self.is_opponent_adjacent(self.players[player],self.players[opponent],"up"):
-            if ("H", x - 1, y) not in self.barriers and ("H", x - 1 , y + 1) not in self.barriers:
-                if ("H", x-2, y) in self.barriers or ("H", x-2, y-1) in self.barriers:
+            if ("H", x - 1, y) not in self.barriers and ("H", x - 1 , y - 1) not in self.barriers:
+                if ("H", x-2, y) in self.barriers or ("H", x-2, y-1) in self.barriers  or (y-1 == 0):
                     if ("V", x-1, y-1) not in self.barriers and ("V", x-2, y-1) not in self.barriers:
                         return True
         elif move == "jump left" and y > 1 and self.is_opponent_adjacent(self.players[player],self.players[opponent],"left"):
@@ -143,12 +143,12 @@ class Env:
                     return True
         elif move == "jump left up" and y > 0 and self.is_opponent_adjacent(self.players[player],self.players[opponent],"left"):
             if ("V", x, y - 1) not in self.barriers and ("V", x - 1, y - 1) not in self.barriers:
-                if ("V", x, y-2) in self.barriers or ("V", x-1, y-2) in self.barriers:
+                if ("V", x, y-2) in self.barriers or ("V", x-1, y-2) in self.barriers or (y-1 == 0):
                     if("H", x-1, y-1) not in self.barriers and ("H", x-1, y-2) not in self.barriers:
                         return True
         elif move == "jump left down" and y > 0 and self.is_opponent_adjacent(self.players[player],self.players[opponent],"left"):
             if ("V", x, y - 1) not in self.barriers and ("V", x - 1, y - 1) not in self.barriers:
-                if ("V", x, y-2) in self.barriers or ("V", x-1, y-2) in self.barriers:
+                if ("V", x, y-2) in self.barriers or ("V", x-1, y-2) in self.barriers or (y-1 == 0):
                     if("H", x, y-1) not in self.barriers and ("H", x, y-2) not in self.barriers:
                         return True
         elif move == "jump right" and y < self.size-2 and self.is_opponent_adjacent(self.players[player],self.players[opponent],"right"):
@@ -157,12 +157,12 @@ class Env:
                     return True
         elif move == "jump right up" and y < self.size-1 and self.is_opponent_adjacent(self.players[player],self.players[opponent],"right"):
             if ("V", x, y) not in self.barriers and ("V", x - 1, y) not in self.barriers:
-                if ("V", x, y+1) in self.barriers or ("V", x-1, y+1) in self.barriers:
+                if ("V", x, y+1) in self.barriers or ("V", x-1, y+1) in self.barriers or (y+1 == self.size-1):
                     if("H", x-1, y) not in self.barriers and ("H", x-1, y+1) not in self.barriers:
                         return True
         elif move == "jump right down" and y < self.size-1 and self.is_opponent_adjacent(self.players[player],self.players[opponent],"right"):
             if ("V", x, y) not in self.barriers and ("V", x - 1, y) not in self.barriers:
-                if ("V", x, y+1) in self.barriers or ("V", x-1, y+1) in self.barriers:
+                if ("V", x, y+1) in self.barriers or ("V", x-1, y+1) in self.barriers or (y+1 == self.size-1):
                     if("H", x, y) not in self.barriers and ("H", x, y+1) not in self.barriers:
                         return True
         

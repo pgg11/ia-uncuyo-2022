@@ -1,12 +1,15 @@
 import numpy as np
 import random
+import os
+import pandas as pd
 
 class RLAgent:
-    def __init__(self, player_id, alpha=0.1, gamma=0.95, epsilon=0.05):
+    def __init__(self, player_id, alpha=0.1, gamma=0.95, epsilon=0.05, epsilon_decay_rate=0.99):
         self.player_id = player_id
         self.alpha = alpha      # Tasa de aprendizaje
         self.gamma = gamma      # Factor de descuento
         self.epsilon = epsilon  # Parámetro de exploración
+        self.epsilon_decay_rate = epsilon_decay_rate  # Tasa de descuento para epsilon
         self.q_table = {}       # Diccionario para almacenar la Q-Table
 
     def get_player_id(self):
@@ -40,18 +43,26 @@ class RLAgent:
             selected_action = random.choice(best_actions)
             return selected_action
 
-    def decay_epsilon(self, decay_rate):
+    def decay_epsilon(self):
         #Reduce el valor de epsilon para explorar menos con el tiempo
-        self.epsilon *= decay_rate
+        if self.epsilon * self.epsilon_decay_rate < 0.1: #Establece un piso para el epsilon
+            self.epsilon = 0.1
+        else:
+            self.epsilon *= self.epsilon_decay_rate
 
 
-def train_agent(env, rl_agent, opponent_agent, episodes=1000, max_turns=64):
+def train_agent(env, rl_agent, opponent_agent, episodes=1000, max_turns=64, save_results = False):
+
+    if save_results:
+        results = []  # Lista para almacenar los resultados
+        file_path = 'q-learning-score-progression-2.csv'
+    
     for episode in range(episodes):
         env.reset()  # Reinicia el entorno para un nuevo episodio
-        print(f"Episodio: {episode}")
+        #print(f"Episodio: {episode}")
         for turn in range(max_turns):
             state = env.get_state()  # Estado actual
-            env.display_board()
+            #env.display_board()
             if turn % 2 == 0:
                 action = opponent_agent.choose_action(env)
                 #print("Player 1: ",end="")
@@ -80,13 +91,25 @@ def train_agent(env, rl_agent, opponent_agent, episodes=1000, max_turns=64):
                     opponent_position = env.players[opponent_id]["position"]
                     orientation, x, y = action[1]
                     if orientation == "H" and y == opponent_position[1]:
-                        reward = 30 # Recompensa por bloquear oponente con barrera
+                        reward = 10 # Recompensa por bloquear oponente con barrera
                     else:
-                        reward = 2  # Recompensa por colocar una barrera
+                        reward = 0  # Recompensa por colocar una barrera
 
                 next_state = env.get_state()
                 rl_agent.update_q_value(actions, state, action, reward, next_state)
+        
+        if save_results:
 
-                rl_agent.decay_epsilon(0.995)  # Decae epsilon tras cada episodio    
-    
+            episode_interval = 1 # Número de episodios entre mediciones
+
+            if episode % episode_interval == 0 and episode > 0:
+                score = env.players[2]['score'] - env.players[1]['score']
+                results.append([episode, rl_agent.epsilon, score])  # Agrega a la lista
+
+        rl_agent.decay_epsilon()  # Decae epsilon tras cada episodio
+
+    if save_results and results:
+        df = pd.DataFrame(results, columns=['Episode', 'Current_Epsilon', 'Score'])
+        df.to_csv(file_path, mode='w', index=False, header=True)
+
     env.reset()  # Reinicia el entorno luego del entrenamiento

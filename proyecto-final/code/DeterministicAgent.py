@@ -27,12 +27,20 @@ class DeterministicAgent:
                 return ("move","down")
             elif ("move","jump down") in actions:
                 return ("move","jump down")
+            elif ("move","jump down left") in actions:
+                return ("move","jump down left")
+            elif ("move","jump down right") in actions:
+                return ("move","jump down right")
 
         elif self.player_id == 2:
             if ("move","up") in actions:
                 return ("move","up")
             elif ("move","jump up") in actions:
                 return ("move","jump up")
+            elif ("move","jump up left") in actions:
+                return ("move","jump up left")
+            elif ("move","jump up right") in actions:
+                return ("move","jump up right")
 
         # 2. Colocación de paredes
         available_barriers = env.get_available_barriers()
@@ -75,11 +83,19 @@ class DeterministicAgent:
                 return ("move","up")
             elif ("move","jump up") in actions:
                 return ("move","jump up")
+            elif ("move","jump up left") in actions:
+                return ("move","jump up left")
+            elif ("move","jump up right") in actions:
+                return ("move","jump up right")
         elif self.player_id == 2:
             if ("move","down") in actions:
                 return ("move","down")
             elif ("move","jump down") in actions:
                 return ("move","jump down")
+            elif ("move","jump down left") in actions:
+                return ("move","jump down left")
+            elif ("move","jump down right") in actions:
+                return ("move","jump down right")
             
     # def is_col_blocked(self, pos, barriers, size):
     #     player_id = self.get_player_id()

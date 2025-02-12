@@ -16,3 +16,6 @@ tp5-busquedas-locales/code/__pycache__
 tp6-csp/code/__pycache__
 
 proyecto-final/code/__pycache__
+proyecto-final/code/venv
+proyecto-final/code/tests.py
+proyecto-final/code/q_learning_tuning_results_9x9.csv

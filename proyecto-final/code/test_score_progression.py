@@ -7,11 +7,11 @@ def test_score_progression():
     # Inicializar el entorno y los agentes
     env = Env(9, 10)
     agent1 = DeterministicAgent(1)
-    agent2 = RLAgent(2, alpha=0.1, gamma=0.95, epsilon=1.0, epsilon_decay_rate=0.995)
+    agent2 = RLAgent(2, alpha=0.1, gamma=0.90, epsilon=1.0, epsilon_decay_rate=0.995)
 
     # Entrenar el agente RL y guardar datos en CSV
     print("Iniciando entrenamiento...")
-    train_agent(env, agent2, agent1, episodes=1000, max_turns=45, save_results=True)
+    train_agent(env, agent2, agent1, episodes=2000, max_turns=45, save_results=True)
     print("Entrenamiento finalizado.\n")
 
     # Reiniciar el entorno para la prueba después del entrenamiento

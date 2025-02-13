@@ -20,4 +20,4 @@ def plot_score_progression(file_path):
 
 
 if __name__ == "__main__":
-    plot_score_progression("./q-learning-score-progression-2.csv")
+    plot_score_progression("./q-learning-score-progression-9x9-2.csv")

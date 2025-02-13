@@ -55,7 +55,7 @@ def train_agent(env, rl_agent, opponent_agent, episodes=1000, max_turns=64, save
 
     if save_results:
         results = []  # Lista para almacenar los resultados
-        file_path = 'q-learning-score-progression-2.csv'
+        file_path = 'q-learning-score-progression-9x9-2.csv'
     
     for episode in range(episodes):
         env.reset()  # Reinicia el entorno para un nuevo episodio
@@ -100,7 +100,7 @@ def train_agent(env, rl_agent, opponent_agent, episodes=1000, max_turns=64, save
         
         if save_results:
 
-            episode_interval = 1 # Número de episodios entre mediciones
+            episode_interval = 10 # Número de episodios entre mediciones
 
             if episode % episode_interval == 0 and episode > 0:
                 score = env.players[2]['score'] - env.players[1]['score']

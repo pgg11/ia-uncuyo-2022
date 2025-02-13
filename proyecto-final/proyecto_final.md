@@ -270,6 +270,94 @@ El número de episodios influye directamente en la capacidad del agente para ref
 ![progresion_score_cada_25_episodios_9x9](./code/results-images/training_progress.png)
 ***Imagen 2: Variación del score cada 25 episodios en el entorno original - alpha=0.1, gamma=0.95, epsilon=1.0, epsilon_decay_rate=0.995***
 
+### Análisis de Resultados en el Entorno 9x9
+
+Los resultados obtenidos en el entorno 9x9 presentan una tendencia menos clara en comparación con el entorno 5x5, lo que era esperable debido al mayor tamaño del espacio de estados. Se pueden destacar varios aspectos clave en el análisis del desempeño del agente:
+
+
+| Alpha | Gamma | Epsilon | Epsilon\_Decay | Episodes | Simulations | Avg\_Score |
+| :---- | :---- | :---- | :---- | :---- | :---- | :---- |
+| 0.1 | 0.9 | 1.0 | 0.99 | 50 | 3 | \-530.66 |
+| 0.1 | 0.9 | 1.0 | 0.99 | 100 | 3 | \-488.0 |
+| 0.1 | 0.9 | 1.0 | 0.99 | 250 | 3 | \-845.33 |
+| 0.1 | 0.9 | 1.0 | 0.99 | 500 | 3 | \-939.33 |
+| 0.1 | 0.9 | 1.0 | 0.99 | 750 | 3 | \-760.0 |
+| 0.1 | 0.9 | 1.0 | 0.99 | 1000 | 3 | \-502.0 |
+| 0.5 | 0.9 | 1.0 | 0.99 | 50 | 3 | \-503.33 |
+| 0.5 | 0.9 | 1.0 | 0.99 | 100 | 3 | \-778.66 |
+| 0.5 | 0.9 | 1.0 | 0.99 | 250 | 3 | \-598.66 |
+| 0.5 | 0.9 | 1.0 | 0.99 | 500 | 3 | \-450.66 |
+| 0.5 | 0.9 | 1.0 | 0.99 | 750 | 3 | \-684.0 |
+| 0.5 | 0.9 | 1.0 | 0.99 | 1000 | 3 | \-496.0 |
+
+![avg_score_per_training_episodes_9x9](./code/results-images/avg_score_vs_episodes_9x9.png)
+
+#### Impacto del Número de Episodios
+
+No se observa una mejora consistente a medida que aumenta el número de episodios. Por ejemplo, con α \= 0.1, el peor rendimiento ocurre con 500 episodios (-939.33), pero mejora considerablemente en 1000 episodios (-502).  
+Con α \= 0.5, la mejor media de recompensa se alcanza con 500 episodios (-450.66), pero el rendimiento disminuye en 750 episodios (-684) y vuelve a mejorar en 1000 episodios (-496).  
+Esto sugiere que, aunque un mayor número de episodios permite más aprendizaje, la interacción entre la tasa de aprendizaje y la exploración puede generar fluctuaciones en la recompensa obtenida.
+
+#### Efecto de la Tasa de Aprendizaje (Alpha)
+
+Con α \= 0.1, el aprendizaje es más conservador, lo que podría explicar por qué algunas configuraciones presentan valores más negativos en episodios intermedios.  
+Con α \= 0.5, el agente ajusta sus Q-values más rápido, lo que en algunos casos genera mejores resultados (ej. 500 episodios), pero también puede causar inestabilidad en el aprendizaje.  
+Esto sugiere que un α moderado podría ser más adecuado para este entorno, evitando tanto la convergencia excesivamente lenta como las oscilaciones bruscas en la política aprendida.
+
+#### Exploración y Decaimiento de Epsilon
+
+Se utilizó ε \= 1.0 con un decaimiento de 0.99, lo que implica que el agente inicia explorando completamente y va reduciendo la exploración progresivamente.  
+En un entorno grande como 9x9, el número de episodios actuales podría no ser suficiente para que el agente comience a explotar lo aprendido, lo que explicaría la alta variabilidad en los resultados.  
+Para mitigar este problema, se implementará un límite inferior en epsilon para garantizar que el agente conserve cierta capacidad de exploración en episodios avanzados y no quede atrapado en una política subóptima.
+
+#### Limitaciones por la Cantidad de Simulaciones
+
+Dado el tiempo que toma cada simulación, solo se realizaron 3 simulaciones por configuración, lo que limita la confiabilidad de los resultados obtenidos.  
+Algunas fluctuaciones en los valores podrían deberse a la variabilidad inherente del proceso de aprendizaje en lugar de diferencias significativas en el desempeño del agente.  
+Para mejorar la validez estadística del análisis, se debería incrementar la cantidad de simulaciones por configuración en futuros experimentos.
+
+#### Comparación con el Entorno 5x5
+
+En comparación con el entorno más pequeño, el desempeño en 9x9 es considerablemente más bajo, lo que refleja la mayor dificultad de aprender en un espacio de estados más grande.  
+La convergencia en este entorno es más lenta y podría requerir más episodios o ajustes en los hiperparámetros para mejorar la estabilidad del aprendizaje.
+
+### Cota inferior en la tasa de aprendizaje
+
+En esta fase del experimento, se realizaron pruebas en ambos entornos(5x5 y 9x9) con los siguientes parametros: alpha=0.1, gamma=0.90, epsilon=1.0, epsilon\_decay\_rate=0.995, episodes= 2000, utilizando un valor mínimo de ϵ=0.1. Esta restricción se implementó con el objetivo de evitar la convergencia prematura a políticas subóptimas y permitir que el agente continúe explorando posibles mejores soluciones en etapas avanzadas del entrenamiento.
+
+A lo largo del entrenamiento, ϵ decreció progresivamente hasta alcanzar el valor mínimo establecido, de esta manera se buscó evitar que el agente quedara atrapado en "pozos" de soluciones subóptimas sin la posibilidad de mejorar su desempeño mediante exploración adicional.
+
+Con estos resultados, se procederá a comparar el rendimiento del agente dichos entornos, analizando las diferencias en aprendizaje, estabilidad y desempeño final.
+
+![progresion_score_cada_10_episodios_5x5](./code/results-images/training_progress_5x5-2.png)
+***Imagen 3: Variación del score cada 10 episodios en el entorno reducido - alpha=0.1, gamma=0.9, epsilon=1.0, epsilon_decay_rate=0.995***
+
+![progresion_score_cada_10_episodios_9x9](./code/results-images/training_progress_9x9-2.png)
+***Imagen 4: Variación del score cada 10 episodios en el entorno original - alpha=0.1, gamma=0.9, epsilon=1.0, epsilon_decay_rate=0.995***
+
+#### Comparación del Aprendizaje
+
+Durante las primeras etapas del entrenamiento, en ambos entornos el agente experimentó una alta variabilidad en los puntajes, lo que indica un periodo de exploración activa. Sin embargo, se observan diferencias significativas en la rapidez de aprendizaje entre ambos escenarios:
+
+En el entorno 5x5, los puntajes iniciales muestran fluctuaciones considerables, pero alrededor del episodio 200 se observa una mejora progresiva en el desempeño del agente.
+
+En el entorno 9x9, el proceso de aprendizaje es mucho más lento, con puntajes negativos elevados que persisten a lo largo de las primeras 300-400 iteraciones, lo que sugiere un entorno más desafiante y con mayor riesgo de estancamiento en soluciones subóptimas.
+
+#### Estabilidad del Agente
+La estabilidad del aprendizaje se refleja en la consistencia de los puntajes obtenidos una vez alcanzado el límite mínimo de ε (epsilon=0.1). En el entorno 5x5, se observa que el agente comienza a obtener puntajes positivos de manera recurrente después del episodio 300, mientras que en el entorno 9x9 los valores negativos continúan predominando, aunque con menor magnitud conforme avanza el entrenamiento.
+
+En el entorno 5x5, el agente consigue valores positivos más frecuentemente después de la fase exploratoria, reflejando un aprendizaje estable.
+
+En el entorno 9x9, a pesar de una mejora en la reducción de los puntajes negativos, la variabilidad sigue siendo alta, lo que indica una falta de estabilidad en la estrategia aprendida.
+
+#### Desempeño Final
+
+Al comparar los últimos episodios, se evidencia una clara diferencia en el desempeño final del agente en ambos entornos:
+
+En 5x5, el agente logra puntajes positivos en una cantidad significativa de episodios, con valores como 72, 52 y 60 en diversas iteraciones finales, lo que sugiere que encontró una estrategia efectiva.
+
+En 9x9, a pesar de la mejora progresiva, los puntajes siguen siendo predominantemente negativos, con valores entre \-400 y \-1000 en múltiples iteraciones, indicando que el agente aún no ha logrado una estrategia completamente eficiente para este entorno más complejo.
+
 ## Bibliografía
 
 [1] Russell, S., & Norvig, P. (2010). Artificial Intelligence: A Modern Approach (3rd ed.). Pearson.

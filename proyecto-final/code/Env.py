@@ -9,8 +9,6 @@ class Env:
             1: {"position": (0,size // 2), "barriers_left": barriers_per_player, "score": 0},
             2: {"position": (size-1,size // 2), "barriers_left": barriers_per_player, "score": 0}
         }
-        self.turn = 0
-        self.max_turns = 50  # limite de turnos
     
     def reset(self):
 
@@ -50,11 +48,11 @@ class Env:
         self.board[x][y] = 0
         self.players[player]["position"] = position
         if player == 1:
-            if position[0] >= self.size-1:
-                self.players[player]["position"] = (0 , self.size // 2)
-        else:
-            if position[0] <= 0:
+            if position[0] > self.size-1:
                 self.players[player]["position"] = (self.size-1 , self.size // 2)
+        else:
+            if position[0] < 0:
+                self.players[player]["position"] = (0 , self.size // 2)
 
     def display_board(self):
 
@@ -255,7 +253,7 @@ class Env:
                 nx, ny = x + dx, y + dy
 
                 if 0 <= nx < self.size and 0 <= ny < self.size:  # Dentro del tablero
-                    if dx == -1 and ("H", x - 1, y) not in self.barriers and ("H", x - 1, y - 1) not in self.barriers:
+                    if dx == -1 and ("H", x - 1 , y) not in self.barriers and ("H", x - 1, y - 1) not in self.barriers:
                         queue.append((nx, ny))
                     elif dx == 1 and ("H", x, y) not in self.barriers and ("H", x, y - 1) not in self.barriers:
                         queue.append((nx, ny))
@@ -287,21 +285,10 @@ class Env:
             move = action[1]
             self.set_player_position(player,self.calculate_new_position(player_pos, action))
 
-            row_position = self.get_player_position(player)[0]
-            goal_row = 0 if player == 2 else self.size-1
-            factor = -1 if player == 1 else 1
-            if move in ["up", "jump up", "jump up left", "jump up right"]:
-                self.players[player]["score"] += factor * 2 ** (self.size - abs(goal_row - row_position))
-            elif move in ["left", "jump left", "right", "jump right"]:
-                self.players[player]["score"] += 0
-            else:
-                self.players[player]["score"] += -factor * (2 ** (self.size - abs(goal_row - row_position)))
-
         elif action[0] == "place_barrier":
             barrier = action[1]
             self.barriers.add(barrier)
             self.players[player]["barriers_left"] -= 1
-            self.players[player]["score"] += 10
     
     def calculate_new_position(self, pos, action):
         

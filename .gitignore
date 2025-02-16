@@ -18,4 +18,12 @@ tp6-csp/code/__pycache__
 proyecto-final/code/__pycache__
 proyecto-final/code/venv
 proyecto-final/code/tests.py
-proyecto-final/code/q_learning_tuning_results_9x9.csv
+
+proyecto-final/code/Env_old.py
+proyecto-final/code/RLAgent_old.py
+proyecto-final/code/csv_old
+proyecto-final/code/results-images_old
+
+proyecto-final/code/plot_episodes_vs_score_old.py
+proyecto-final/code/plot_score_vs_episode_qty_old.py
+proyecto-final/code/plot_tuning_results.py

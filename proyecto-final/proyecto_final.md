@@ -22,6 +22,7 @@ Quoridor es un juego de mesa en el que el objetivo es llegar a la fila opuesta d
 
 ##### Preparación:
 Cada jugador coloca su peón en la casilla central de su fila inicial (la fila más cercana a él). Cada jugador recibe 10 muros.
+
 ![Tablero de quoridor](./quoridor-images/1.png)
 
 ##### Turnos:
